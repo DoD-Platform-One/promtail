@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 3.8.1-bb.0](https://img.shields.io/badge/Version-3.8.1--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.3.0](https://img.shields.io/badge/AppVersion-2.3.0-informational?style=flat-square)
+![Version: 3.8.1-bb.1](https://img.shields.io/badge/Version-3.8.1--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.3.0](https://img.shields.io/badge/AppVersion-2.3.0-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -12,8 +12,8 @@ Promtail is an agent which ships the contents of local logs to a Loki instance
 * <https://grafana.com/docs/loki/latest/>
 
 ## Learn More
-- [Application Overview](docs/overview.md)
-- [Other Documentation](docs/)
+* [Application Overview](docs/overview.md)
+* [Other Documentation](docs/)
 
 ## Pre-Requisites
 
@@ -57,7 +57,7 @@ helm install promtail chart/
 | priorityClassName | string | `nil` | The name of the PriorityClass |
 | livenessProbe | object | `{}` | Liveness probe |
 | readinessProbe | object | See `values.yaml` | Readiness probe |
-| resources | object | `{}` | Resource requests and limits |
+| resources | object | `{"limits":{"cpu":"200m","memory":"128Mi"},"requests":{"cpu":"200m","memory":"128Mi"}}` | Resource requests and limits |
 | podSecurityContext | object | `{"runAsGroup":0,"runAsUser":0}` | The security context for pods |
 | containerSecurityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true}` | The security context for containers |
 | rbac.create | bool | `true` | Specifies whether RBAC resources are to be created |
@@ -103,4 +103,4 @@ helm install promtail chart/
 
 ## Contributing
 
-Please see the [contributing guide](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/blob/master/CONTRIBUTING.md) if you are interested in contributing to Big Bang.
+Please see the [contributing guide](./CONTRIBUTING.md) if you are interested in contributing.
