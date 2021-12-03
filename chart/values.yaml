@@ -86,6 +86,10 @@ containerSecurityContext:
     drop:
       - ALL
   allowPrivilegeEscalation: false
+  runAsUser: 0
+  privileged: false
+  seLinuxOptions:
+    type: spc_t  
 
 rbac:
   # -- Specifies whether RBAC resources are to be created
