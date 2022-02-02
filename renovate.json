@@ -1,0 +1,39 @@
+{
+    "baseBranches": ["main"],
+    "configWarningReuseIssue": false,
+    "dependencyDashboard": true,
+    "dependencyDashboardHeader": "- [ ] Sync upstream helm chart version with updated dependencies.",
+    "dependencyDashboardTitle": "Renovate: Upgrade Promtail Package Dependencies",
+    "draftPR": true,
+    "enabledManagers": ["helm-values","regex"],
+    "ignorePaths": ["chart/charts/**"],
+    "ignoreDeps": ["docker.io/busybox"],
+    "labels": ["promtail","renovate"],
+    "packageRules": [
+        {
+            "matchDatasources": ["docker"],
+            "groupName": "Ironbank"
+        }
+    ],
+    "regexManagers": [
+        {
+            "fileMatch": ["^chart/Chart\\.yaml$"],
+            "matchStrings": [
+                "appVersion:\\s*(?<currentValue>.+)"
+            ],
+            "depNameTemplate": "ironbank/opensource/grafana/promtail",
+            "datasourceTemplate": "docker",
+            "registryUrlTemplate": "https://registry1.dso.mil"
+        },
+        {
+            "fileMatch": ["^chart/Chart\\.yaml$"],
+            "matchStrings": [
+                "- Promtail:\\s*(?<currentValue>.+)"
+            ],
+            "depNameTemplate": "ironbank/opensource/grafana/promtail",
+            "datasourceTemplate": "docker",
+            "registryUrlTemplate": "https://registry1.dso.mil"
+        }
+    ],
+    "separateMajorMinor": false
+}
