@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 3.8.1-bb.3](https://img.shields.io/badge/Version-3.8.1--bb.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.3.0](https://img.shields.io/badge/AppVersion-2.3.0-informational?style=flat-square)
+![Version: 3.11.0-bb.0](https://img.shields.io/badge/Version-3.11.0--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.4.2](https://img.shields.io/badge/AppVersion-v2.4.2-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -50,7 +50,7 @@ helm install promtail chart/
 | image.tag | string | `nil` | Overrides the image tag whose default is the chart's appVersion |
 | image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy |
 | imagePullSecrets | list | `[{"name":"private-registry"}]` | Image pull secrets for Docker images |
-| annotations | object | `{}` | Annotations for the SaemonSet |
+| annotations | object | `{}` | Annotations for the DaemonSet |
 | updateStrategy | object | `{}` | The update strategy for the DaemonSet |
 | podLabels | object | `{}` | Pod labels |
 | podAnnotations | object | `{}` | Pod annotations |
@@ -83,6 +83,7 @@ helm install promtail chart/
 | serviceMonitor.labels | object | `{}` | Additional ServiceMonitor labels |
 | serviceMonitor.interval | string | `nil` | ServiceMonitor scrape interval |
 | serviceMonitor.scrapeTimeout | string | `nil` | ServiceMonitor scrape timeout in Go duration format (e.g. 15s) |
+| serviceMonitor.relabelings | list | `[]` | ServiceMonitor relabel configs to apply to samples before scraping https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig |
 | extraPorts | object | `{}` | Configure additional ports and services. For each configured port, a corresponding service is created. See values.yaml for details |
 | podSecurityPolicy | object | See `values.yaml` | PodSecurityPolicy configuration. |
 | config | object | See `values.yaml` | Section for crafting Promtails config file. The only directly relevant value is `config.file` which is a templated string that references the other values and snippets below this key. |
@@ -100,6 +101,7 @@ helm install promtail chart/
 | networkPolicy.metrics.cidrs | list | `[]` | Specifies specific network CIDRs which are allowed to access the metrics port. In case you use namespaceSelector, you also have to specify your kubelet networks here. The metrics ports are also used for probes. |
 | networkPolicy.k8sApi.port | int | `8443` | Specify the k8s API endpoint port |
 | networkPolicy.k8sApi.cidrs | list | `[]` | Specifies specific network CIDRs you want to limit access to |
+| extraObjects | list | `[]` | Extra K8s manifests to deploy |
 
 ## Contributing
 
