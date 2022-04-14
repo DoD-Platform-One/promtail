@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 3.11.0-bb.0](https://img.shields.io/badge/Version-3.11.0--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.4.2](https://img.shields.io/badge/AppVersion-v2.4.2-informational?style=flat-square)
+![Version: 3.11.0-bb.1](https://img.shields.io/badge/Version-3.11.0--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.4.2](https://img.shields.io/badge/AppVersion-v2.4.2-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -47,7 +47,7 @@ helm install promtail chart/
 | initContainer.fsInotifyMaxUserInstances | int | `128` | The inotify max user instances to configure |
 | image.registry | string | `"registry1.dso.mil"` | The Docker registry |
 | image.repository | string | `"ironbank/opensource/grafana/promtail"` | Docker image repository |
-| image.tag | string | `nil` | Overrides the image tag whose default is the chart's appVersion |
+| image.tag | string | `"v2.4.2"` | Overrides the image tag whose default is the chart's appVersion |
 | image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy |
 | imagePullSecrets | list | `[{"name":"private-registry"}]` | Image pull secrets for Docker images |
 | annotations | object | `{}` | Annotations for the DaemonSet |
@@ -101,6 +101,8 @@ helm install promtail chart/
 | networkPolicy.metrics.cidrs | list | `[]` | Specifies specific network CIDRs which are allowed to access the metrics port. In case you use namespaceSelector, you also have to specify your kubelet networks here. The metrics ports are also used for probes. |
 | networkPolicy.k8sApi.port | int | `8443` | Specify the k8s API endpoint port |
 | networkPolicy.k8sApi.cidrs | list | `[]` | Specifies specific network CIDRs you want to limit access to |
+| istio.enabled | bool | `false` |  |
+| istio.mtls.mode | string | `"STRICT"` |  |
 | extraObjects | list | `[]` | Extra K8s manifests to deploy |
 
 ## Contributing
