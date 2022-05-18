@@ -25,7 +25,7 @@ image:
   # -- Docker image repository
   repository: ironbank/opensource/grafana/promtail
   # -- Overrides the image tag whose default is the chart's appVersion
-  tag: v2.4.2
+  tag: v2.5.0
   # -- Docker image pull policy
   pullPolicy: IfNotPresent
 
@@ -89,7 +89,7 @@ containerSecurityContext:
   runAsUser: 0
   privileged: false
   seLinuxOptions:
-    type: spc_t  
+    type: spc_t
 
 rbac:
   # -- Specifies whether RBAC resources are to be created
@@ -295,7 +295,7 @@ config:
 
     # -- You can put here any keys that will be directly added to the config file's 'client' block.
     # @default -- empty
-    extraClientConfigs: ""
+    extraClientConfigs: []
 
     # -- You can put here any additional scrape configs you want to add to the config file.
     # @default -- empty
@@ -349,9 +349,11 @@ config:
       log_level: {{ .Values.config.logLevel }}
       http_listen_port: {{ .Values.config.serverPort }}
 
-    client:
-      url: {{ tpl .Values.config.lokiAddress . }}
-      {{- tpl .Values.config.snippets.extraClientConfigs . | nindent 2 }}
+    clients:
+      - url: {{ tpl .Values.config.lokiAddress . }}
+      {{- with .Values.config.snippets.extraClientConfigs }}
+      {{- toYaml . | nindent 2 }}
+      {{- end }}
 
     positions:
       filename: /run/promtail/positions.yaml
