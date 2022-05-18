@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [4.2.0-bb.0]
+### Changed
+- Bumped chart version to 4.2.0
+- Bumped promtail tag to v2.5.0
+
 ## [3.11.0-bb.1]
 ### Changed
 - Add default PeerAuthentication to enable STRICT mTLS
