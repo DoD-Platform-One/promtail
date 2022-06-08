@@ -1,0 +1,72 @@
+component-definition:
+  uuid: 2A0F84C5-7FD3-48A1-9C39-68316603C038
+  metadata: 
+    title: Promtail
+    last-modified: '2022-06-08T12:00:00Z'
+    version: "20220608"
+    oscal-version: 1.0.0
+    parties:
+      # Should be consistent across all of the packages, but where is ground truth?
+    - uuid: 72134592-08C2-4A77-ABAD-C880F109367A 
+      type: organization
+      name: Platform One
+      links:
+      - href: <https://p1.dso.mil>
+        rel: website
+  components: # for BB, this would be all the pieces of big bang
+  - uuid: 6266DF09-F893-4D44-9823-4486B91D81ED
+    type: software
+    title: Promtail
+    description: |
+      Log collector
+    purpose: Collects logs from the cluster
+    responsible-roles:
+    - role-id: provider
+      party-uuids: 
+      - 72134592-08C2-4A77-ABAD-C880F109367A # matches parties entry for p1
+    control-implementations:
+    - uuid: 0277E054-45DD-404E-A6A9-4E0BF47AC561
+      source: https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
+      description:
+        Controls implemented by Promtail for inheritance by applications
+      implemented-requirements:
+      - uuid: 1E11CEA9-CE73-45F0-BE08-D16B521B8E7E
+        control-id: ac-6.9
+        description: >-
+          Promtail can be configured to collect all logs from Kubernetes and underlying operating systems, allowing the aggregation of privileged function calls.
+      - uuid: CF81FA93-D365-42C2-82B1-A24EB92556E5
+        control-id: au-2
+        description: >-
+          Logging daemons are present on each node that BigBang is installed on.  Out of the box, the following events are captured:
+
+          * all containers emitting to STDOUT or STDERR (captured  by container runtime translating container logs to /var/log/containers)
+          * all kubernetes api server requests 
+          * all events emitted by the kubelet
+      - uuid: 6DDD209A-87A4-48BF-B6B9-5925CC7CF4C3
+        control-id: au-3
+        description: >-
+          Records captured by the logging daemon are enriched to  ensure the following are always present:
+
+          * time of the event (UTC)
+          * source of event (pod, namespace, container id)
+
+          Applications are responsible for providing all other information.
+      - uuid: D3F883A0-4531-407F-8802-F8233CD1DEE9
+        control-id: au-8
+        description: >-
+          Records captured by the logging daemon are enriched to  ensure the following are always present:
+
+          * time of the event (UTC)
+          * source of event (pod, namespace, container id)
+
+          Applications are responsible for providing all other information.
+  back-matter: 
+    resources:
+    - uuid: D552C935-E40C-4A03-B5CC-4605EBD95B6D
+      title: Promtail
+      rlinks:
+      - href: https://grafana.com/docs/loki/latest/clients/promtail/
+    - uuid: 211C474B-E11A-4DD2-8075-50CDAC507CDC
+      title: Big Bang Promtail package
+      rlinks:
+        - href: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/promtail
