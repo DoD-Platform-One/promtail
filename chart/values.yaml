@@ -380,12 +380,6 @@ networkPolicy:
     port: 8443
     # -- Specifies specific network CIDRs you want to limit access to
     cidrs: []
-istio:
-  enabled: false
-  mtls:
-    # STRICT = Allow only mutual TLS traffic
-    # PERMISSIVE = Allow both plain text and mutual TLS traffic
-    mode: STRICT
 
 # -- Extra K8s manifests to deploy
 extraObjects: []
@@ -398,3 +392,18 @@ extraObjects: []
   #     data:
   #       - key: promtail-oauth2-creds
   #         name: client_secret
+
+istio:
+  # -- Toggle interaction with Istio
+  enabled: false
+  mtls:
+    # -- STRICT = Allow only mutual TLS traffic
+    # PERMISSIVE = Allow both plain text and mutual TLS traffic
+    mode: STRICT
+
+networkPolicies:
+  # -- Toggle networkPolicies
+  enabled: false
+
+# -- Toggle or openshift specific config
+openshift: false
