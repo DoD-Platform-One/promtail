@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 4.2.0-bb.1](https://img.shields.io/badge/Version-4.2.0--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.5.0](https://img.shields.io/badge/AppVersion-v2.5.0-informational?style=flat-square)
+![Version: 4.2.0-bb.2](https://img.shields.io/badge/Version-4.2.0--bb.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.5.0](https://img.shields.io/badge/AppVersion-v2.5.0-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -101,9 +101,11 @@ helm install promtail chart/
 | networkPolicy.metrics.cidrs | list | `[]` | Specifies specific network CIDRs which are allowed to access the metrics port. In case you use namespaceSelector, you also have to specify your kubelet networks here. The metrics ports are also used for probes. |
 | networkPolicy.k8sApi.port | int | `8443` | Specify the k8s API endpoint port |
 | networkPolicy.k8sApi.cidrs | list | `[]` | Specifies specific network CIDRs you want to limit access to |
-| istio.enabled | bool | `false` |  |
-| istio.mtls.mode | string | `"STRICT"` |  |
 | extraObjects | list | `[]` | Extra K8s manifests to deploy |
+| istio.enabled | bool | `false` | Toggle interaction with Istio |
+| istio.mtls.mode | string | `"STRICT"` | STRICT = Allow only mutual TLS traffic PERMISSIVE = Allow both plain text and mutual TLS traffic |
+| networkPolicies.enabled | bool | `false` | Toggle networkPolicies |
+| openshift | bool | `false` | Toggle or openshift specific config |
 
 ## Contributing
 
