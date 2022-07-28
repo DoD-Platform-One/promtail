@@ -13,3 +13,6 @@ This package contains an extensible and configurable installation of Grafana Pro
 Just like Prometheus, promtail is configured using a scrape_configs stanza. relabel_configs allows for fine-grained control of what to ingest, what to drop, and the final metadata to attach to the log line. Refer to the docs for configuring Promtail for more details. Once Promtail has a set of targets (i.e., things to read from, like files) and all labels are set correctly, it will start tailing (continuously reading) the logs from targets. Once enough data is read into memory or after a configurable timeout, it is flushed as a single batch to Loki.
 
 As Promtail reads data from sources (files and systemd journal, if configured), it will track the last offset it read in a positions file. By default, the positions file is stored at /var/log/positions.yaml. The positions file helps Promtail continue reading from where it left off in the case of the Promtail instance restarting.
+
+## Extra Client configurations
+See [Chart README](../chart/README.md#customize-client-config-options) for options for adding/customizing clients.
