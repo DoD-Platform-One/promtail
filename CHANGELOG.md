@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [6.2.2-bb.0]
+### Changed
+- Bumped chart version to 6.2.2
+- Bumped promtail tag to 2.6.1
+
 ## [4.2.0-bb.2]
 ### Added
 - Added network policies to Promtail

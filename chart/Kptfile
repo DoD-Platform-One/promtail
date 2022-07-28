@@ -1,11 +1,11 @@
 apiVersion: kpt.dev/v1alpha1
 kind: Kptfile
 metadata:
-  name: promtail
+  name: chart
 upstream:
   type: git
   git:
-    commit: 3c9c18e552cc5a453b5c7740d8b28cb523720bd0
+    commit: af12933502bcd61a3e73013da9bb2e3f51b04976
     repo: https://github.com/grafana/helm-charts
     directory: /charts/promtail
-    ref: promtail-4.2.0
+    ref: promtail-6.2.2
