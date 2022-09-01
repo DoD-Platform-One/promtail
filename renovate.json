@@ -9,6 +9,7 @@
     "ignorePaths": ["chart/charts/**"],
     "ignoreDeps": ["docker.io/busybox"],
     "labels": ["promtail","renovate"],
+    "commitMessagePrefix": "SKIP UPDATE CHECK",
     "packageRules": [
         {
             "matchDatasources": ["docker"],
