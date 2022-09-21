@@ -9,7 +9,7 @@ When an upgrade is required, `kpt` can be ran to pull the updates with a targete
 
 Once completed, you will need to reconcile the modifications that Big Bang makes back into the orchestration.
 
-# Modfiications Made to the upstream chart
+# Modifications Made to the upstream chart
 
 ## /chart/Chart.yaml
 - Added `bigbang.dev/applicationVersions` annotation with the promtail version
