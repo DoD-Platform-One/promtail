@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 6.2.2-bb.2](https://img.shields.io/badge/Version-6.2.2--bb.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.6.1](https://img.shields.io/badge/AppVersion-2.6.1-informational?style=flat-square)
+![Version: 6.7.2-bb.0](https://img.shields.io/badge/Version-6.7.2--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.7.0](https://img.shields.io/badge/AppVersion-v2.7.0-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -55,7 +55,7 @@ helm install promtail chart/
 | initContainer.fsInotifyMaxUserInstances | int | `128` | The inotify max user instances to configure |
 | image.registry | string | `"registry1.dso.mil"` | The Docker registry |
 | image.repository | string | `"ironbank/opensource/grafana/promtail"` | Docker image repository |
-| image.tag | string | `"v2.6.1"` | Overrides the image tag whose default is the chart's appVersion |
+| image.tag | string | `"v2.7.0"` | Overrides the image tag whose default is the chart's appVersion |
 | image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy |
 | imagePullSecrets | list | `[{"name":"private-registry"}]` | Image pull secrets for Docker images |
 | annotations | object | `{}` | Annotations for the DaemonSet |
@@ -93,6 +93,8 @@ helm install promtail chart/
 | serviceMonitor.scrapeTimeout | string | `nil` | ServiceMonitor scrape timeout in Go duration format (e.g. 15s) |
 | serviceMonitor.relabelings | list | `[]` | ServiceMonitor relabel configs to apply to samples before scraping https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig (defines `relabel_configs`) |
 | serviceMonitor.metricRelabelings | list | `[]` | ServiceMonitor relabel configs to apply to samples as the last step before ingestion https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig (defines `metric_relabel_configs`) |
+| serviceMonitor.scheme | string | `""` |  |
+| serviceMonitor.tlsConfig | object | `{}` |  |
 | extraPorts | object | `{}` | Configure additional ports and services. For each configured port, a corresponding service is created. See values.yaml for details |
 | podSecurityPolicy | object | See `values.yaml` | PodSecurityPolicy configuration. |
 | config | object | See `values.yaml` | Section for crafting Promtails config file. The only directly relevant value is `config.file` which is a templated string that references the other values and snippets below this key. |
