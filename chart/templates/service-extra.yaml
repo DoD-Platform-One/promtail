@@ -26,7 +26,7 @@ spec:
   {{- with .loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
     {{- toYaml . | nindent 4 }}
-  {{- end -}}
+  {{- end }}
   {{- with .externalIPs }}
   externalIPs:
     {{- toYaml . | nindent 4 }}
@@ -38,7 +38,7 @@ spec:
   ports:
     - name: {{ .name | default $key }}
       targetPort: {{ .name | default $key }}
-      protocol: TCP
+      protocol: {{ $values.protocol | default "TCP" }}
       {{- if $values.service }}
       port: {{ $values.service.port | default $values.containerPort }}
       {{- if $values.service.nodePort }}
