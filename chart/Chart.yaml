@@ -17,3 +17,6 @@ maintainers:
 annotations:
   bigbang.dev/applicationVersions: |
     - Promtail: v2.7.0
+  helm.sh/images: |
+    - name: promtail
+      image: registry1.dso.mil/ironbank/opensource/grafana/promtail:v2.7.0

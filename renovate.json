@@ -34,6 +34,13 @@
             "depNameTemplate": "ironbank/opensource/grafana/promtail",
             "datasourceTemplate": "docker",
             "registryUrlTemplate": "https://registry1.dso.mil"
+        },
+        {
+            "fileMatch": ["^chart/Chart\\.yaml$"],
+            "matchStrings": [
+                "image:[^\\S\\r\\n]+(?<depName>.+):(?<currentValue>.+)"
+            ],
+            "datasourceTemplate": "docker"
         }
     ],
     "separateMajorMinor": false
