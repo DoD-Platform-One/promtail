@@ -51,7 +51,7 @@ image:
   # -- Docker image repository
   repository: ironbank/opensource/grafana/promtail
   # -- Overrides the image tag whose default is the chart's appVersion
-  tag: v2.7.0
+  tag: v2.7.1
   # -- Docker image pull policy
   pullPolicy: IfNotPresent
 
@@ -122,6 +122,10 @@ rbac:
   create: true
   # -- Specifies whether a PodSecurityPolicy is to be created
   pspEnabled: false
+
+# -- The name of the Namespace to deploy
+# If not set, `.Release.Namespace` is used
+namespace: null
 
 serviceAccount:
   # -- Specifies whether a ServiceAccount should be created

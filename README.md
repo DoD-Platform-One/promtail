@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 6.7.2-bb.0](https://img.shields.io/badge/Version-6.7.2--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.7.0](https://img.shields.io/badge/AppVersion-v2.7.0-informational?style=flat-square)
+![Version: 6.8.1-bb.0](https://img.shields.io/badge/Version-6.8.1--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.7.1](https://img.shields.io/badge/AppVersion-v2.7.1-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -47,15 +47,13 @@ helm install promtail chart/
 | deployment.autoscaling.maxReplicas | int | `10` |  |
 | deployment.autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
 | deployment.autoscaling.targetMemoryUtilizationPercentage | string | `nil` |  |
-| initContainer.enabled | bool | `false` | Specifies whether the init container for setting inotify max user instances is to be enabled |
-| initContainer.image.registry | string | `"docker.io"` | The Docker registry for the init container |
-| initContainer.image.repository | string | `"busybox"` | Docker image repository for the init container |
-| initContainer.image.tag | float | `1.33` | Docker tag for the init container |
-| initContainer.image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy for the init container image |
-| initContainer.fsInotifyMaxUserInstances | int | `128` | The inotify max user instances to configure |
+| secret.labels | object | `{}` | Labels for the Secret |
+| secret.annotations | object | `{}` | Annotations for the Secret |
+| configmap.enabled | bool | `false` | If enabled, promtail config will be created as a ConfigMap instead of a secret |
+| initContainer | list | `[]` |  |
 | image.registry | string | `"registry1.dso.mil"` | The Docker registry |
 | image.repository | string | `"ironbank/opensource/grafana/promtail"` | Docker image repository |
-| image.tag | string | `"v2.7.0"` | Overrides the image tag whose default is the chart's appVersion |
+| image.tag | string | `"v2.7.1"` | Overrides the image tag whose default is the chart's appVersion |
 | image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy |
 | imagePullSecrets | list | `[{"name":"private-registry"}]` | Image pull secrets for Docker images |
 | annotations | object | `{}` | Annotations for the DaemonSet |
@@ -70,6 +68,7 @@ helm install promtail chart/
 | containerSecurityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"privileged":false,"readOnlyRootFilesystem":true,"runAsUser":0,"seLinuxOptions":{"type":"spc_t"}}` | The security context for containers |
 | rbac.create | bool | `true` | Specifies whether RBAC resources are to be created |
 | rbac.pspEnabled | bool | `false` | Specifies whether a PodSecurityPolicy is to be created |
+| namespace | string | `nil` | The name of the Namespace to deploy If not set, `.Release.Namespace` is used |
 | serviceAccount.create | bool | `true` | Specifies whether a ServiceAccount should be created |
 | serviceAccount.name | string | `nil` | The name of the ServiceAccount to use. If not set and `create` is true, a name is generated using the fullname template |
 | serviceAccount.imagePullSecrets | list | `[]` | Image pull secrets for the service account |
@@ -84,6 +83,7 @@ helm install promtail chart/
 | extraArgs | list | `[]` |  |
 | extraEnv | list | `[]` | Extra environment variables |
 | extraEnvFrom | list | `[]` | Extra environment variables from secrets or configmaps |
+| enableServiceLinks | bool | `true` | Configure enableServiceLinks in pod |
 | serviceMonitor.enabled | bool | `false` | If enabled, ServiceMonitor resources for Prometheus Operator are created |
 | serviceMonitor.namespace | string | `nil` | Alternative namespace for ServiceMonitor resources |
 | serviceMonitor.namespaceSelector | object | `{}` | Namespace selector for ServiceMonitor resources |
@@ -93,8 +93,11 @@ helm install promtail chart/
 | serviceMonitor.scrapeTimeout | string | `nil` | ServiceMonitor scrape timeout in Go duration format (e.g. 15s) |
 | serviceMonitor.relabelings | list | `[]` | ServiceMonitor relabel configs to apply to samples before scraping https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig (defines `relabel_configs`) |
 | serviceMonitor.metricRelabelings | list | `[]` | ServiceMonitor relabel configs to apply to samples as the last step before ingestion https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig (defines `metric_relabel_configs`) |
-| serviceMonitor.scheme | string | `""` |  |
-| serviceMonitor.tlsConfig | object | `{}` |  |
+| serviceMonitor.targetLabels | list | `[]` | ServiceMonitor will add labels from the service to the Prometheus metric https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#servicemonitorspec |
+| serviceMonitor.scheme | string | `"http"` | ServiceMonitor will use http by default, but you can pick https as well |
+| serviceMonitor.tlsConfig | string | `nil` | ServiceMonitor will use these tlsConfig settings to make the health check requests |
+| serviceMonitor.prometheusRule | object | `{"additionalLabels":{},"enabled":false,"rules":[]}` | Prometheus rules will be deployed for alerting purposes |
+| extraContainers | object | `{}` |  |
 | extraPorts | object | `{}` | Configure additional ports and services. For each configured port, a corresponding service is created. See values.yaml for details |
 | podSecurityPolicy | object | See `values.yaml` | PodSecurityPolicy configuration. |
 | config | object | See `values.yaml` | Section for crafting Promtails config file. The only directly relevant value is `config.file` which is a templated string that references the other values and snippets below this key. |
@@ -102,6 +105,7 @@ helm install promtail chart/
 | config.serverPort | int | `3101` | The port of the Promtail server Must be reference in `config.file` to configure `server.http_listen_port` See default config in `values.yaml` |
 | config.clients | list | See `values.yaml` | The config of clients of the Promtail server Must be reference in `config.file` to configure `clients` |
 | config.snippets | object | See `values.yaml` | A section of reusable snippets that can be reference in `config.file`. Custom snippets may be added in order to reduce redundancy. This is especially helpful when multiple `kubernetes_sd_configs` are use which usually have large parts in common. |
+| config.snippets.extraLimitsConfig | string | empty | You can put here any keys that will be directly added to the config file's 'limits_config' block. |
 | config.snippets.extraServerConfigs | string | empty | You can put here any keys that will be directly added to the config file's 'server' block. |
 | config.snippets.extraScrapeConfigs | string | empty | You can put here any additional scrape configs you want to add to the config file. |
 | config.snippets.extraRelabelConfigs | list | `[]` | You can put here any additional relabel_configs to "kubernetes-pods" job |
@@ -112,6 +116,7 @@ helm install promtail chart/
 | networkPolicy.metrics.cidrs | list | `[]` | Specifies specific network CIDRs which are allowed to access the metrics port. In case you use namespaceSelector, you also have to specify your kubelet networks here. The metrics ports are also used for probes. |
 | networkPolicy.k8sApi.port | int | `8443` | Specify the k8s API endpoint port |
 | networkPolicy.k8sApi.cidrs | list | `[]` | Specifies specific network CIDRs you want to limit access to |
+| httpPathPrefix | string | `""` | Base path to server all API routes fro |
 | extraObjects | list | `[]` | Extra K8s manifests to deploy |
 | istio.enabled | bool | `false` | Toggle interaction with Istio |
 | istio.mtls.mode | string | `"STRICT"` | STRICT = Allow only mutual TLS traffic PERMISSIVE = Allow both plain text and mutual TLS traffic |
