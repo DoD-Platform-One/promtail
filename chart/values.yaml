@@ -180,19 +180,37 @@ defaultVolumeMounts:
     readOnly: true
 
 # Extra volumes to be added in addition to those specified under `defaultVolumes`.
-extraVolumes: []
+extraVolumes:
+  - name: varlog
+    hostPath:
+      path: /var/log
+  - name: machine-id
+    hostPath:
+      path: /etc/machine-id
 
 # Extra volume mounts together. Corresponds to `extraVolumes`.
-extraVolumeMounts: []
+extraVolumeMounts:
+  - name: varlog
+    mountPath: /var/log
+    readOnly: true
+  - name: machine-id
+    mountPath: /etc/machine-id
+    readOnly: true
+
 
 # Extra args for the Promtail container.
-extraArgs: []
 # -- Example:
 # -- extraArgs:
 # --   - -client.external-labels=hostname=$(HOSTNAME)
+extraArgs:
+  - -config.expand-env=true
 
 # -- Extra environment variables
-extraEnv: []
+extraEnv:
+  - name: NODE_HOSTNAME
+    valueFrom:
+      fieldRef:
+        fieldPath: spec.nodeName
 
 # -- Extra environment variables from secrets or configmaps
 extraEnvFrom: []
@@ -442,6 +460,23 @@ config:
           {{- with .Values.config.snippets.extraRelabelConfigs }}
           {{- toYaml . | nindent 4 }}
           {{- end }}
+      - job_name: systemd-messages
+        static_configs:
+          - targets: [localhost]
+            labels:
+              job: varlogs
+              host: "${NODE_HOSTNAME}"
+              __path__: /var/log/*
+        relabel_configs:
+        - source_labels:
+          - __journal_systemd_unit
+          target_label: systemd_unit
+        - source_labels:
+          - __journal_hostname
+          target_label: nodename
+        - source_labels:
+          - __journal_syslog_identifier
+          target_label: syslog_identifier
 
   # -- Config file contents for Promtail.
   # Must be configured as string.

@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 6.8.1-bb.0](https://img.shields.io/badge/Version-6.8.1--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.7.1](https://img.shields.io/badge/AppVersion-v2.7.1-informational?style=flat-square)
+![Version: 6.8.1-bb.1](https://img.shields.io/badge/Version-6.8.1--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.7.1](https://img.shields.io/badge/AppVersion-v2.7.1-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -78,10 +78,19 @@ helm install promtail chart/
 | tolerations | list | `[{"effect":"NoSchedule","key":"node-role.kubernetes.io/master","operator":"Exists"},{"effect":"NoSchedule","key":"node-role.kubernetes.io/control-plane","operator":"Exists"}]` | Tolerations for pods. By default, pods will be scheduled on master/control-plane nodes. |
 | defaultVolumes | list | See `values.yaml` | Default volumes that are mounted into pods. In most cases, these should not be changed. Use `extraVolumes`/`extraVolumeMounts` for additional custom volumes. |
 | defaultVolumeMounts | list | See `values.yaml` | Default volume mounts. Corresponds to `volumes`. |
-| extraVolumes | list | `[]` |  |
-| extraVolumeMounts | list | `[]` |  |
-| extraArgs | list | `[]` |  |
-| extraEnv | list | `[]` | Extra environment variables |
+| extraVolumes[0].name | string | `"varlog"` |  |
+| extraVolumes[0].hostPath.path | string | `"/var/log"` |  |
+| extraVolumes[1].name | string | `"machine-id"` |  |
+| extraVolumes[1].hostPath.path | string | `"/etc/machine-id"` |  |
+| extraVolumeMounts[0].name | string | `"varlog"` |  |
+| extraVolumeMounts[0].mountPath | string | `"/var/log"` |  |
+| extraVolumeMounts[0].readOnly | bool | `true` |  |
+| extraVolumeMounts[1].name | string | `"machine-id"` |  |
+| extraVolumeMounts[1].mountPath | string | `"/etc/machine-id"` |  |
+| extraVolumeMounts[1].readOnly | bool | `true` |  |
+| extraVolumeMounts[1].type | string | `"File"` |  |
+| extraArgs | list | `["-config.expand-env=true"]` | - -client.external-labels=hostname=$(HOSTNAME) |
+| extraEnv | list | `[{"name":"NODE_HOSTNAME","valueFrom":{"fieldRef":{"fieldPath":"spec.nodeName"}}}]` | Extra environment variables |
 | extraEnvFrom | list | `[]` | Extra environment variables from secrets or configmaps |
 | enableServiceLinks | bool | `true` | Configure enableServiceLinks in pod |
 | serviceMonitor.enabled | bool | `false` | If enabled, ServiceMonitor resources for Prometheus Operator are created |
