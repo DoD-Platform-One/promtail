@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 6.8.1-bb.1](https://img.shields.io/badge/Version-6.8.1--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.7.1](https://img.shields.io/badge/AppVersion-v2.7.1-informational?style=flat-square)
+![Version: 6.8.1-bb.2](https://img.shields.io/badge/Version-6.8.1--bb.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.7.1](https://img.shields.io/badge/AppVersion-v2.7.1-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -88,7 +88,6 @@ helm install promtail chart/
 | extraVolumeMounts[1].name | string | `"machine-id"` |  |
 | extraVolumeMounts[1].mountPath | string | `"/etc/machine-id"` |  |
 | extraVolumeMounts[1].readOnly | bool | `true` |  |
-| extraVolumeMounts[1].type | string | `"File"` |  |
 | extraArgs | list | `["-config.expand-env=true"]` | - -client.external-labels=hostname=$(HOSTNAME) |
 | extraEnv | list | `[{"name":"NODE_HOSTNAME","valueFrom":{"fieldRef":{"fieldPath":"spec.nodeName"}}}]` | Extra environment variables |
 | extraEnvFrom | list | `[]` | Extra environment variables from secrets or configmaps |
