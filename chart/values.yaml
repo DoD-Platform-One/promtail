@@ -556,3 +556,7 @@ networkPolicies:
 
 # -- Toggle or openshift specific config
 openshift: false
+
+# -- Toggle Loki network policy enabling
+loki:
+  enabled: false
