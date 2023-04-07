@@ -1,4 +1,4 @@
-{{- if and .Values.networkPolicies.enabled }}
+{{- if and .Values.networkPolicies.enabled .Values.loki.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -15,7 +15,7 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
-          app.kubernetes.io/name: loki
+          app.kubernetes.io/name: logging
       podSelector:
         matchLabels:
           app.kubernetes.io/name: logging-loki
