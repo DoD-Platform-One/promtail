@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 6.8.1-bb.3](https://img.shields.io/badge/Version-6.8.1--bb.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.7.1](https://img.shields.io/badge/AppVersion-v2.7.1-informational?style=flat-square)
+![Version: 6.10.0-bb.0](https://img.shields.io/badge/Version-6.10.0--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.7.5](https://img.shields.io/badge/AppVersion-2.7.5-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -53,7 +53,7 @@ helm install promtail chart/
 | initContainer | list | `[]` |  |
 | image.registry | string | `"registry1.dso.mil"` | The Docker registry |
 | image.repository | string | `"ironbank/opensource/grafana/promtail"` | Docker image repository |
-| image.tag | string | `"v2.7.1"` | Overrides the image tag whose default is the chart's appVersion |
+| image.tag | string | `"v2.7.5"` | Overrides the image tag whose default is the chart's appVersion |
 | image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy |
 | imagePullSecrets | list | `[{"name":"private-registry"}]` | Image pull secrets for Docker images |
 | annotations | object | `{}` | Annotations for the DaemonSet |
@@ -125,6 +125,20 @@ helm install promtail chart/
 | networkPolicy.k8sApi.port | int | `8443` | Specify the k8s API endpoint port |
 | networkPolicy.k8sApi.cidrs | list | `[]` | Specifies specific network CIDRs you want to limit access to |
 | httpPathPrefix | string | `""` | Base path to server all API routes fro |
+| sidecar.configReloader.enabled | bool | `false` |  |
+| sidecar.configReloader.image.registry | string | `"registry1.dso.mil"` | The Docker registry for sidecar config-reloader |
+| sidecar.configReloader.image.repository | string | `"ironbank/opensource/jimmidyson/configmap-reload"` | Docker image repository for sidecar config-reloader |
+| sidecar.configReloader.image.tag | string | `"v0.8.0"` | Docker image tag for sidecar config-reloader |
+| sidecar.configReloader.image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy for sidecar config-reloader |
+| sidecar.configReloader.extraArgs | list | `[]` |  |
+| sidecar.configReloader.extraEnv | list | `[]` | Extra environment variables for sidecar config-reloader |
+| sidecar.configReloader.extraEnvFrom | list | `[]` | Extra environment variables from secrets or configmaps for sidecar config-reloader |
+| sidecar.configReloader.containerSecurityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true}` | The security context for containers for sidecar config-reloader |
+| sidecar.configReloader.readinessProbe | object | `{}` | Readiness probe for sidecar config-reloader |
+| sidecar.configReloader.livenessProbe | object | `{}` | Liveness probe for sidecar config-reloader |
+| sidecar.configReloader.resources | object | `{}` | Resource requests and limits for sidecar config-reloader |
+| sidecar.configReloader.config.serverPort | int | `9533` | The port of the config-reloader server |
+| sidecar.configReloader.serviceMonitor.enabled | bool | `true` |  |
 | extraObjects | list | `[]` | Extra K8s manifests to deploy |
 | istio.enabled | bool | `false` | Toggle interaction with Istio |
 | istio.mtls.mode | string | `"STRICT"` | STRICT = Allow only mutual TLS traffic PERMISSIVE = Allow both plain text and mutual TLS traffic |
