@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ---
 ## [6.10.0-bb.0]
 ### Added
+- Bumped appversion to 2.8.0
+
+## [6.10.0-bb.0]
+### Added
 - Bumped chart version to 6.10.0
 - Bumped appversion to 2.7.5
 
