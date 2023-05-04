@@ -51,7 +51,7 @@ image:
   # -- Docker image repository
   repository: ironbank/opensource/grafana/promtail
   # -- Overrides the image tag whose default is the chart's appVersion
-  tag: v2.8.0
+  tag: v2.8.1
   # -- Docker image pull policy
   pullPolicy: IfNotPresent
 
@@ -369,6 +369,8 @@ config:
   # @default -- See `values.yaml`
   clients:
     - url: http://loki-gateway/loki/api/v1/push
+  # -- The config to enable tracing
+  enableTracing: false
   # -- A section of reusable snippets that can be reference in `config.file`.
   # Custom snippets may be added in order to reduce redundancy.
   # This is especially helpful when multiple `kubernetes_sd_configs` are use which usually have large parts in common.
@@ -516,6 +518,9 @@ config:
 
     limits_config:
       {{- tpl .Values.config.snippets.extraLimitsConfig . | nindent 2 }}
+
+    tracing:
+      enabled: {{ .Values.config.enableTracing }}
 
 networkPolicy:
   # -- Specifies whether Network Policies should be created
