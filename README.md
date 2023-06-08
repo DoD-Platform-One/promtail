@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 6.11.0-bb.0](https://img.shields.io/badge/Version-6.11.0--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.8.1](https://img.shields.io/badge/AppVersion-v2.8.1-informational?style=flat-square)
+![Version: 6.11.0-bb.1](https://img.shields.io/badge/Version-6.11.0--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.8.1](https://img.shields.io/badge/AppVersion-v2.8.1-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -39,6 +39,7 @@ helm install promtail chart/
 |-----|------|---------|-------------|
 | nameOverride | string | `nil` | Overrides the chart's name |
 | fullnameOverride | string | `nil` | Overrides the chart's computed fullname |
+| vpa | object | `{"annotations":{},"controlledResources":[],"enabled":true,"kind":"DaemonSet","maxAllowed":{"cpu":"200m","memory":"100Mi"},"minAllowed":{"cpu":"200m","memory":"100Mi"},"updatePolicy":{"updateMode":"Auto"}}` | config for VerticalPodAutoscaler instead of HorizontalPodAutoscaler |
 | daemonset.enabled | bool | `true` | Deploys Promtail as a DaemonSet |
 | deployment.enabled | bool | `false` | Deploys Promtail as a Deployment |
 | deployment.replicaCount | int | `1` |  |
