@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ---
 ## [6.11.0-bb.0]
 ### Added
+- added 'vpa.yaml' chart template
+- added VPA logic to 'values.yaml' 
+
+## [6.11.0-bb.0]
+### Added
 - Bumped chart version to 6.11.0
 - Bumped appversion to 2.8.1
 
