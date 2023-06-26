@@ -75,7 +75,7 @@ image:
   # -- Docker image repository
   repository: ironbank/opensource/grafana/promtail
   # -- Overrides the image tag whose default is the chart's appVersion
-  tag: v2.8.1
+  tag: v2.8.2
   # -- Docker image pull policy
   pullPolicy: IfNotPresent
 
@@ -321,6 +321,8 @@ extraContainers: {}
 extraPorts: {}
 #  syslog:
 #    name: tcp-syslog
+#    annotations: {}
+#    labels: {}
 #    containerPort: 1514
 #    protocol: TCP
 #    service:
@@ -329,8 +331,6 @@ extraPorts: {}
 #      port: 1514
 #      externalIPs: []
 #      nodePort: null
-#      annotations: {}
-#      labels: {}
 #      loadBalancerIP: null
 #      loadBalancerSourceRanges: []
 #      externalTrafficPolicy: null
@@ -393,6 +393,10 @@ config:
   # @default -- See `values.yaml`
   clients:
     - url: http://loki-gateway/loki/api/v1/push
+  # -- Configures where Promtail will save it's positions file, to resume reading after restarts.
+  # Must be referenced in `config.file` to configure `positions`
+  positions:
+    filename: /run/promtail/positions.yaml
   # -- The config to enable tracing
   enableTracing: false
   # -- A section of reusable snippets that can be reference in `config.file`.
@@ -534,7 +538,7 @@ config:
       {{- tpl (toYaml .Values.config.clients) . | nindent 2 }}
 
     positions:
-      filename: /run/promtail/positions.yaml
+      {{- tpl (toYaml .Values.config.positions) . | nindent 2 }}
 
     scrape_configs:
       {{- tpl .Values.config.snippets.scrapeConfigs . | nindent 2 }}
@@ -577,7 +581,7 @@ sidecar:
       # -- Docker image repository for sidecar config-reloader
       repository: ironbank/opensource/jimmidyson/configmap-reload
       # -- Docker image tag for sidecar config-reloader
-      tag: v0.8.0
+      tag: v0.9.0
       # -- Docker image pull policy for sidecar config-reloader
       pullPolicy: IfNotPresent
     # Extra args for the config-reloader container.
