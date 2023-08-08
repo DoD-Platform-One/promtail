@@ -23,6 +23,7 @@ Once completed, you will need to reconcile the modifications that Big Bang makes
 - Update image registry/repository/tag as required by update
 - Add image pull secret for `private-registry`
 - Set resource requests/limits
+- Be wary of changes to `relabel_configs:` section, these may cause `field action already set` errors
 - Append to containerSecurityContext
 ```
   runAsUser: 0

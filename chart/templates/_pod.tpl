@@ -10,7 +10,11 @@ metadata:
     {{- end }}
   annotations:
     {{- if not .Values.sidecar.configReloader.enabled }}
+    {{- if not .Values.configmap.enabled }}
     checksum/config: {{ include (print .Template.BasePath "/secret.yaml") . | sha256sum }}
+    {{- else }}
+    checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
+    {{- end }}
     {{- end }}
     {{- with .Values.podAnnotations }}
     {{- toYaml . | nindent 4 }}
@@ -27,6 +31,10 @@ spec:
   {{- end }}
   {{- with .Values.imagePullSecrets }}
   imagePullSecrets:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.hostAliases }}
+  hostAliases:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   securityContext:
