@@ -5,7 +5,7 @@ metadata:
 upstream:
   type: git
   git:
-    commit: c756b95494544056e43098b9e8b695a8010c21f2
+    commit: 6f083a6093f31abff01e3b7121a1c75b6fb250e4
     repo: https://github.com/grafana/helm-charts
     directory: /charts/promtail
-    ref: promtail-6.11.3
+    ref: promtail-6.13.1

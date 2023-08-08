@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 6.11.0-bb.1](https://img.shields.io/badge/Version-6.11.0--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.8.2](https://img.shields.io/badge/AppVersion-v2.8.2-informational?style=flat-square)
+![Version: 6.13.1-bb.0](https://img.shields.io/badge/Version-6.13.1--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.3](https://img.shields.io/badge/AppVersion-2.8.3-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -39,8 +39,12 @@ helm install promtail chart/
 |-----|------|---------|-------------|
 | nameOverride | string | `nil` | Overrides the chart's name |
 | fullnameOverride | string | `nil` | Overrides the chart's computed fullname |
-| vpa | object | `{"annotations":{},"controlledResources":[],"enabled":true,"kind":"DaemonSet","maxAllowed":{"cpu":"200m","memory":"100Mi"},"minAllowed":{"cpu":"200m","memory":"100Mi"},"updatePolicy":{"updateMode":"Auto"}}` | config for VerticalPodAutoscaler instead of HorizontalPodAutoscaler |
+| vpa | object | `{"annotations":{},"controlledResources":[],"enabled":false,"kind":"DaemonSet","maxAllowed":{},"minAllowed":{},"updatePolicy":{"updateMode":"Auto"}}` | config for VerticalPodAutoscaler |
 | daemonset.enabled | bool | `true` | Deploys Promtail as a DaemonSet |
+| daemonset.autoscaling.enabled | bool | `false` | Creates a VerticalPodAutoscaler for the daemonset |
+| daemonset.autoscaling.controlledResources | list | `[]` | List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory |
+| daemonset.autoscaling.maxAllowed | object | `{}` | Defines the max allowed resources for the pod |
+| daemonset.autoscaling.minAllowed | object | `{}` | Defines the min allowed resources for the pod |
 | deployment.enabled | bool | `false` | Deploys Promtail as a Deployment |
 | deployment.replicaCount | int | `1` |  |
 | deployment.autoscaling.enabled | bool | `false` | Creates a HorizontalPodAutoscaler for the deployment |
@@ -48,15 +52,17 @@ helm install promtail chart/
 | deployment.autoscaling.maxReplicas | int | `10` |  |
 | deployment.autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
 | deployment.autoscaling.targetMemoryUtilizationPercentage | string | `nil` |  |
+| deployment.autoscaling.strategy | object | `{"type":"RollingUpdate"}` | Set deployment object update strategy |
 | secret.labels | object | `{}` | Labels for the Secret |
 | secret.annotations | object | `{}` | Annotations for the Secret |
 | configmap.enabled | bool | `false` | If enabled, promtail config will be created as a ConfigMap instead of a secret |
 | initContainer | list | `[]` |  |
 | image.registry | string | `"registry1.dso.mil"` | The Docker registry |
 | image.repository | string | `"ironbank/opensource/grafana/promtail"` | Docker image repository |
-| image.tag | string | `"v2.8.2"` | Overrides the image tag whose default is the chart's appVersion |
+| image.tag | string | `"v2.8.3"` | Overrides the image tag whose default is the chart's appVersion |
 | image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy |
 | imagePullSecrets | list | `[{"name":"private-registry"}]` | Image pull secrets for Docker images |
+| hostAliases | list | `[]` | hostAliases to add |
 | annotations | object | `{}` | Annotations for the DaemonSet |
 | updateStrategy | object | `{}` | The update strategy for the DaemonSet |
 | podLabels | object | `{}` | Pod labels |
@@ -110,9 +116,12 @@ helm install promtail chart/
 | extraPorts | object | `{}` | Configure additional ports and services. For each configured port, a corresponding service is created. See values.yaml for details |
 | podSecurityPolicy | object | See `values.yaml` | PodSecurityPolicy configuration. |
 | config | object | See `values.yaml` | Section for crafting Promtails config file. The only directly relevant value is `config.file` which is a templated string that references the other values and snippets below this key. |
+| config.enabled | bool | `true` | Enable Promtail config from Helm chart Set `configmap.enabled: true` and this to `false` to manage your own Promtail config See default config in `values.yaml` |
 | config.logLevel | string | `"info"` | The log level of the Promtail server Must be reference in `config.file` to configure `server.log_level` See default config in `values.yaml` |
+| config.logFormat | string | `"logfmt"` | The log format of the Promtail server Must be reference in `config.file` to configure `server.log_format` Valid formats: `logfmt, json` See default config in `values.yaml` |
 | config.serverPort | int | `3101` | The port of the Promtail server Must be reference in `config.file` to configure `server.http_listen_port` See default config in `values.yaml` |
 | config.clients | list | See `values.yaml` | The config of clients of the Promtail server Must be reference in `config.file` to configure `clients` |
+| config.positions | object | `{"filename":"/run/promtail/positions.yaml"}` | Configures where Promtail will save it's positions file, to resume reading after restarts. Must be referenced in `config.file` to configure `positions` |
 | config.enableTracing | bool | `false` | The config to enable tracing |
 | config.snippets | object | See `values.yaml` | A section of reusable snippets that can be reference in `config.file`. Custom snippets may be added in order to reduce redundancy. This is especially helpful when multiple `kubernetes_sd_configs` are use which usually have large parts in common. |
 | config.snippets.extraLimitsConfig | string | empty | You can put here any keys that will be directly added to the config file's 'limits_config' block. |
