@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 6.13.1-bb.0](https://img.shields.io/badge/Version-6.13.1--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.3](https://img.shields.io/badge/AppVersion-2.8.3-informational?style=flat-square)
+![Version: 6.15.0-bb.0](https://img.shields.io/badge/Version-6.15.0--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.8.4](https://img.shields.io/badge/AppVersion-v2.8.4-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -59,10 +59,11 @@ helm install promtail chart/
 | initContainer | list | `[]` |  |
 | image.registry | string | `"registry1.dso.mil"` | The Docker registry |
 | image.repository | string | `"ironbank/opensource/grafana/promtail"` | Docker image repository |
-| image.tag | string | `"v2.8.3"` | Overrides the image tag whose default is the chart's appVersion |
+| image.tag | string | `"v2.8.4"` | Overrides the image tag whose default is the chart's appVersion |
 | image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy |
 | imagePullSecrets | list | `[{"name":"private-registry"}]` | Image pull secrets for Docker images |
 | hostAliases | list | `[]` | hostAliases to add |
+| hostNetwork | string | `nil` | Controls whether the pod has the `hostNetwork` flag set. |
 | annotations | object | `{}` | Annotations for the DaemonSet |
 | updateStrategy | object | `{}` | The update strategy for the DaemonSet |
 | podLabels | object | `{}` | Pod labels |
@@ -139,7 +140,7 @@ helm install promtail chart/
 | sidecar.configReloader.enabled | bool | `false` |  |
 | sidecar.configReloader.image.registry | string | `"registry1.dso.mil"` | The Docker registry for sidecar config-reloader |
 | sidecar.configReloader.image.repository | string | `"ironbank/opensource/jimmidyson/configmap-reload"` | Docker image repository for sidecar config-reloader |
-| sidecar.configReloader.image.tag | string | `"v0.9.0"` | Docker image tag for sidecar config-reloader |
+| sidecar.configReloader.image.tag | string | `"v0.11.1"` | Docker image tag for sidecar config-reloader |
 | sidecar.configReloader.image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy for sidecar config-reloader |
 | sidecar.configReloader.extraArgs | list | `[]` |  |
 | sidecar.configReloader.extraEnv | list | `[]` | Extra environment variables for sidecar config-reloader |
