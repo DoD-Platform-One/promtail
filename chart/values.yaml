@@ -43,6 +43,7 @@ daemonset:
 
     # -- List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
     controlledResources: []
+
     # Specifies which resource values should be controlled: RequestsOnly or RequestsAndLimits.
     # controlledValues: RequestsAndLimits
 
@@ -110,7 +111,7 @@ image:
   # -- Docker image repository
   repository: ironbank/opensource/grafana/promtail
   # -- Overrides the image tag whose default is the chart's appVersion
-  tag: v2.8.3
+  tag: v2.8.4
   # -- Docker image pull policy
   pullPolicy: IfNotPresent
 
@@ -124,8 +125,14 @@ hostAliases: []
 #    hostnames:
 #      - domain.tld
 
+# -- Controls whether the pod has the `hostNetwork` flag set.
+hostNetwork: null
+
 # -- Annotations for the DaemonSet
 annotations: {}
+
+# -- Number of old history to retain to allow rollback (If not set, default Kubernetes value is set to 10)
+# revisionHistoryLimit: 1
 
 # -- The update strategy for the DaemonSet
 updateStrategy: {}
@@ -308,7 +315,7 @@ serviceMonitor:
   # https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
   # (defines `metric_relabel_configs`)
   metricRelabelings: []
-  # --ServiceMonitor will add labels from the service to the Prometheus metric
+  # -- ServiceMonitor will add labels from the service to the Prometheus metric
   # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#servicemonitorspec
   targetLabels: []
   # -- ServiceMonitor will use http by default, but you can pick https as well
@@ -632,7 +639,7 @@ sidecar:
       # -- Docker image repository for sidecar config-reloader
       repository: ironbank/opensource/jimmidyson/configmap-reload
       # -- Docker image tag for sidecar config-reloader
-      tag: v0.9.0
+      tag: v0.11.1
       # -- Docker image pull policy for sidecar config-reloader
       pullPolicy: IfNotPresent
     # Extra args for the config-reloader container.
