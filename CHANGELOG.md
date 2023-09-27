@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [6.15.0-bb.1] 2023-09-27
+### Updated
+- Updated ironbank/opensource/grafana/promtail v2.8.4 -> v2.9.1
+- Updated registry1.dso.mil/ironbank/opensource/grafana/promtail v2.8.4 -> v2.9.1
+
 ## [6.15.0-bb.0]
 ### Updated
 - Updated chart version to 6.15.0
