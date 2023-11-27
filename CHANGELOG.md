@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [6.15.3-bb.1] 2023-11-15
+### Added
+- Added istio `allow-nothing` policy
+- Added istio `allow-prometheus` policy
+- Added istio custom policy template
+
 ## [6.15.3-bb.0] 2023-10-23
 ### Updated
 - Updated ironbank/opensource/grafana/promtail v2.9.1 -> v2.9.2
