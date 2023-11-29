@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 6.15.3-bb.1](https://img.shields.io/badge/Version-6.15.3--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.9.2](https://img.shields.io/badge/AppVersion-v2.9.2-informational?style=flat-square)
+![Version: 6.15.3-bb.2](https://img.shields.io/badge/Version-6.15.3--bb.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.9.2](https://img.shields.io/badge/AppVersion-v2.9.2-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -155,15 +155,15 @@ helm install promtail chart/
 | istio.enabled | bool | `false` | Toggle interaction with Istio |
 | istio.hardened.enabled | bool | `false` |  |
 | istio.hardened.customAuthorizationPolicies | list | `[]` |  |
+| istio.hardened.prometheus.enabled | bool | `true` |  |
+| istio.hardened.prometheus.namespaces[0] | string | `"monitoring"` |  |
+| istio.hardened.prometheus.principals[0] | string | `"cluster.local/ns/monitoring/sa/monitoring-grafana"` |  |
+| istio.hardened.prometheus.principals[1] | string | `"cluster.local/ns/monitoring/sa/monitoring-monitoring-kube-alertmanager"` |  |
+| istio.hardened.prometheus.principals[2] | string | `"cluster.local/ns/monitoring/sa/monitoring-monitoring-kube-operator"` |  |
+| istio.hardened.prometheus.principals[3] | string | `"cluster.local/ns/monitoring/sa/monitoring-monitoring-kube-prometheus"` |  |
+| istio.hardened.prometheus.principals[4] | string | `"cluster.local/ns/monitoring/sa/monitoring-monitoring-kube-state-metrics"` |  |
+| istio.hardened.prometheus.principals[5] | string | `"cluster.local/ns/monitoring/sa/monitoring-monitoring-prometheus-node-exporter"` |  |
 | istio.mtls.mode | string | `"STRICT"` | STRICT = Allow only mutual TLS traffic PERMISSIVE = Allow both plain text and mutual TLS traffic |
-| istio.promtail.enabled | bool | `false` |  |
-| istio.promtail.annotations | object | `{}` |  |
-| istio.promtail.labels | object | `{}` |  |
-| istio.promtail.gateways[0] | string | `"istio-system/public"` |  |
-| istio.promtail.hosts[0] | string | `"promtail.{{ .Values.domain }}"` |  |
-| istio.promtail.service | string | `""` |  |
-| istio.promtail.port | string | `""` |  |
-| istio.promtail.namespace | string | `""` |  |
 | networkPolicies.enabled | bool | `false` | Toggle networkPolicies |
 | networkPolicies.controlPlaneCidr | string | `"0.0.0.0/0"` | Control Plane CIDR, defaults to 0.0.0.0/0, use `kubectl get endpoints -n default kubernetes` to get the CIDR range needed for your cluster Must be an IP CIDR range (x.x.x.x/x - ideally with /32 for the specific IP of a single endpoint, broader range for multiple masters/endpoints) Used by package NetworkPolicies to allow Kube API access |
 | openshift | bool | `false` | Toggle or openshift specific config |
