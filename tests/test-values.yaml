@@ -6,6 +6,5 @@ networkPolicies:
 
 # enable istio hardening in tests
 istio:
-  enabled: false
   hardened:
     enabled: true
