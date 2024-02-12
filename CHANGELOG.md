@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [6.15.5-bb.0] 2024-02-06
+### Updated
+- Updated ironbank/opensource/grafana/promtail v2.9.2 -> v2.9.4
+- Updated registry1.dso.mil/ironbank/opensource/grafana/promtail v2.9.2 -> v2.9.4
+- Updated chart version to 6.15.5
+
 ## [6.15.3-bb.4] 2024-01-17
 ### Changed
 - removed Istio.enabled from test-values
