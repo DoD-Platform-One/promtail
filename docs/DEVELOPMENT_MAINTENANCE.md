@@ -36,7 +36,7 @@
     type: spc_t
 ```
 ## chart/Kptfile
-- Tracks current upstream chaßrt
+- Tracks current upstream chart
 
 ### Manual Testing
 > NOTE: For these testing steps it is good to do them on both a clean install and an upgrade. For clean install, point `promtail` to your branch. For an upgrade do an install with `promtail` pointing to the latest tag, then perform a helm upgrade with `promtail` pointing to your branch.
@@ -77,4 +77,4 @@ Current testing is done manually. Deployment of Big Bang with Istio, Monitoring,
 
 Once healthy - navigate in browser to `grafana.bigbang.dev`, login with [default credentials](https://repo1.dso.mil/big-bang/bigbang/-/blob/master/docs/guides/using-bigbang/default-credentials.md) and navigate `Configuration -> Data sources -> Loki` and click on `Save & test` and ensure `Data source connected and labels found`.
 
-When in doubt with any testing or upgrade steps, reach out to the CODEOWNERS for assistance.
+> When in doubt with any testing or upgrade steps, reach out to the CODEOWNERS for assistance.
