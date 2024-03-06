@@ -238,6 +238,9 @@ defaultVolumes:
   - name: pods
     hostPath:
       path: /var/log/pods
+  - name: machine-id
+    hostPath:
+      path: /etc/machine-id
 
 # -- Default volume mounts. Corresponds to `volumes`.
 # @default -- See `values.yaml`
@@ -250,25 +253,25 @@ defaultVolumeMounts:
   - name: pods
     mountPath: /var/log/pods
     readOnly: true
-
-# Extra volumes to be added in addition to those specified under `defaultVolumes`.
-extraVolumes:
-  - name: varlog
-    hostPath:
-      path: /var/log
-  - name: machine-id
-    hostPath:
-      path: /etc/machine-id
-
-# Extra volume mounts together. Corresponds to `extraVolumes`.
-extraVolumeMounts:
-  - name: varlog
-    mountPath: /var/log
-    readOnly: true
   - name: machine-id
     mountPath: /etc/machine-id
     readOnly: true
 
+# Extra volumes to be added in addition to those specified under `defaultVolumes`.
+# BB: /var/log logging is enabled by default for BigBang. To disable it, set:
+# extraVolumes: []
+extraVolumes:
+  - name: varlog
+    hostPath:
+      path: /var/log
+
+# Extra volume mounts together. Corresponds to `extraVolumes`.
+# BB: /var/log logging is enabled by default for BigBang. To disable it, set:
+# extraVolumeMounts: []
+extraVolumeMounts:
+  - name: varlog
+    mountPath: /var/log
+    readOnly: true
 
 # Extra args for the Promtail container.
 # -- Example:
