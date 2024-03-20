@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 6.15.5-bb.2](https://img.shields.io/badge/Version-6.15.5--bb.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.9.4](https://img.shields.io/badge/AppVersion-2.9.4-informational?style=flat-square)
+![Version: 6.15.5-bb.3](https://img.shields.io/badge/Version-6.15.5--bb.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.9.4](https://img.shields.io/badge/AppVersion-2.9.4-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -149,6 +149,8 @@ helm install promtail chart/
 | extraObjects | list | `[]` | Extra K8s manifests to deploy |
 | istio.enabled | bool | `false` | Toggle interaction with Istio |
 | istio.hardened.enabled | bool | `false` |  |
+| istio.hardened.outboundTrafficPolicyMode | string | `"REGISTRY_ONLY"` |  |
+| istio.hardened.customServiceEntries | list | `[]` |  |
 | istio.hardened.customAuthorizationPolicies | list | `[]` |  |
 | istio.hardened.prometheus.enabled | bool | `true` |  |
 | istio.hardened.prometheus.namespaces[0] | string | `"monitoring"` |  |
