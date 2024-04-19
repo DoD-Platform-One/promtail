@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [6.15.5-bb.4] 2024-04-19
+### Added
+- Added custom network policy
+
 ## [6.15.5-bb.3] 2024-03-08
 ### changed
 - Adding Sidecar to deny egress that is external to istio services
