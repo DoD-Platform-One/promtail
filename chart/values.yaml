@@ -734,6 +734,7 @@ networkPolicies:
   # Must be an IP CIDR range (x.x.x.x/x - ideally with /32 for the specific IP of a single endpoint, broader range for multiple masters/endpoints)
   # Used by package NetworkPolicies to allow Kube API access
   controlPlaneCidr: 0.0.0.0/0
+  additionalPolicies: []
 
 # -- Toggle or openshift specific config
 openshift: false
