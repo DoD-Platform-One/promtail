@@ -1,7 +1,7 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:e5825f76-9386-4833-9474-77280faef6f2",
+  "serialNumber": "urn:uuid:a5af5158-f3f7-4b11-be4e-a2df6ab17369",
   "version": 1,
   "metadata": {
     "tools": null,
@@ -2047,7 +2047,7 @@
           "bom-ref": "registry1.dso.mil/ironbank/opensource/grafana/promtail@v2.9.4:pkg:golang/github.com/masterminds/goutils@v1.1.1?package-id=39dfa839ade854c3",
           "name": "github.com/Masterminds/goutils",
           "version": "v1.1.1",
-          "cpe": "cpe:2.3:a:Masterminds:goutils:v1.1.1:*:*:*:*:*:*:*",
+          "cpe": "cpe:2.3:a:goutils_project:goutils:v1.1.1:*:*:*:*:go:*:*",
           "purl": "pkg:golang/github.com/Masterminds/goutils@v1.1.1",
           "properties": [
             {
@@ -2423,7 +2423,7 @@
           "bom-ref": "registry1.dso.mil/ironbank/opensource/grafana/promtail@v2.9.4:pkg:golang/github.com/aws/aws-sdk-go@v1.44.315?package-id=0e8a90bca05ffc85",
           "name": "github.com/aws/aws-sdk-go",
           "version": "v1.44.315",
-          "cpe": "cpe:2.3:a:aws:aws-sdk-go:v1.44.315:*:*:*:*:*:*:*",
+          "cpe": "cpe:2.3:a:amazon:aws_software_development_kit:v1.44.315:*:*:*:*:go:*:*",
           "purl": "pkg:golang/github.com/aws/aws-sdk-go@v1.44.315",
           "properties": [
             {
@@ -2441,10 +2441,6 @@
             {
               "name": "syft:package:metadataType",
               "value": "go-module-buildinfo-entry"
-            },
-            {
-              "name": "syft:cpe23",
-              "value": "cpe:2.3:a:aws:aws_sdk_go:v1.44.315:*:*:*:*:*:*:*"
             },
             {
               "name": "syft:location:0:layerID",
@@ -11281,7 +11277,7 @@
           "bom-ref": "registry1.dso.mil/ironbank/opensource/grafana/promtail@v2.9.4:pkg:golang/golang.org/x/net@v0.17.0?package-id=9f1d7c8dc1538d12",
           "name": "golang.org/x/net",
           "version": "v0.17.0",
-          "cpe": "cpe:2.3:a:golang:x\\/net:v0.17.0:*:*:*:*:*:*:*",
+          "cpe": "cpe:2.3:a:golang:networking:v0.17.0:*:*:*:*:go:*:*",
           "purl": "pkg:golang/golang.org/x/net@v0.17.0",
           "properties": [
             {
@@ -11511,7 +11507,7 @@
           "bom-ref": "registry1.dso.mil/ironbank/opensource/grafana/promtail@v2.9.4:pkg:golang/golang.org/x/text@v0.14.0?package-id=eca06d2b90ed4361",
           "name": "golang.org/x/text",
           "version": "v0.14.0",
-          "cpe": "cpe:2.3:a:golang:x\\/text:v0.14.0:*:*:*:*:*:*:*",
+          "cpe": "cpe:2.3:a:golang:text:v0.14.0:*:*:*:*:*:*:*",
           "purl": "pkg:golang/golang.org/x/text@v0.14.0",
           "properties": [
             {
@@ -12105,6 +12101,7 @@
           "bom-ref": "registry1.dso.mil/ironbank/opensource/grafana/promtail@v2.9.4:pkg:golang/gopkg.in/yaml.v3@v3.0.1?package-id=6f36622f8eee894b",
           "name": "gopkg.in/yaml.v3",
           "version": "v3.0.1",
+          "cpe": "cpe:2.3:a:yaml_project:yaml:v3.0.1:*:*:*:*:go:*:*",
           "purl": "pkg:golang/gopkg.in/yaml.v3@v3.0.1",
           "properties": [
             {
