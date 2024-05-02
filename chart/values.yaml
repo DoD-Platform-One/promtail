@@ -555,6 +555,8 @@ config:
               - __meta_kubernetes_pod_uid
               - __meta_kubernetes_pod_container_name
             target_label: __path__
+          - action: labeldrop
+            regex: "service_istio.+|security_istio_io_.+|service.istio.+|security.istio.+|helm.+|istio_.+|statefulset_kubernetes_io_pod_name|apps_kubernetes_io_pod_index|prometheus|operator_prometheus_io_name|app_kubernetes_io_managed_by|heritage|release"
           {{- if .Values.config.snippets.addScrapeJobLabel }}
           - replacement: kubernetes-pods
             target_label: scrape_job
