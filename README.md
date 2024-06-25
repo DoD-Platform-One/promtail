@@ -5,6 +5,7 @@
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
 ## Upstream References
+
 * <https://grafana.com/loki>
 
 * <https://github.com/grafana/loki>
@@ -12,6 +13,7 @@ Promtail is an agent which ships the contents of local logs to a Loki instance
 * <https://grafana.com/docs/loki/latest/>
 
 ## Learn More
+
 * [Application Overview](docs/overview.md)
 * [Other Documentation](docs/)
 
@@ -23,12 +25,13 @@ Promtail is an agent which ships the contents of local logs to a Loki instance
 
 Install Helm
 
-https://helm.sh/docs/intro/install/
+<https://helm.sh/docs/intro/install/>
 
 ## Deployment
 
 * Clone down the repository
 * cd into directory
+
 ```bash
 helm install promtail chart/
 ```
@@ -102,9 +105,9 @@ helm install promtail chart/
 | serviceMonitor.labels | object | `{}` | Additional ServiceMonitor labels |
 | serviceMonitor.interval | string | `nil` | ServiceMonitor scrape interval |
 | serviceMonitor.scrapeTimeout | string | `nil` | ServiceMonitor scrape timeout in Go duration format (e.g. 15s) |
-| serviceMonitor.relabelings | list | `[]` | ServiceMonitor relabel configs to apply to samples before scraping https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig (defines `relabel_configs`) |
-| serviceMonitor.metricRelabelings | list | `[]` | ServiceMonitor relabel configs to apply to samples as the last step before ingestion https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig (defines `metric_relabel_configs`) |
-| serviceMonitor.targetLabels | list | `[]` | ServiceMonitor will add labels from the service to the Prometheus metric https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#servicemonitorspec |
+| serviceMonitor.relabelings | list | `[]` | ServiceMonitor relabel configs to apply to samples before scraping <https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig> (defines `relabel_configs`) |
+| serviceMonitor.metricRelabelings | list | `[]` | ServiceMonitor relabel configs to apply to samples as the last step before ingestion <https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig> (defines `metric_relabel_configs`) |
+| serviceMonitor.targetLabels | list | `[]` | ServiceMonitor will add labels from the service to the Prometheus metric <https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#servicemonitorspec> |
 | serviceMonitor.scheme | string | `"http"` | ServiceMonitor will use http by default, but you can pick https as well |
 | serviceMonitor.tlsConfig | string | `nil` | ServiceMonitor will use these tlsConfig settings to make the health check requests |
 | serviceMonitor.prometheusRule | object | `{"additionalLabels":{},"enabled":false,"rules":[]}` | Prometheus rules will be deployed for alerting purposes |
