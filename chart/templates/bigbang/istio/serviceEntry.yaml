@@ -9,8 +9,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
 spec:
   {{- toYaml .spec | nindent 2 }}
-  exportTo:
-  - "."
+
 ---
 {{ end -}}
 {{ end -}}
