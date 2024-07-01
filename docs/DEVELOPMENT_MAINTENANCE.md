@@ -6,7 +6,25 @@
 5. Update `CHANGELOG.md` adding an entry for the new version and noting all changes (at minimum should include `Updated <chart or dependency> to x.x.x`).
 6. Generate the `README.md` updates by following the [guide in gluon](https://repo1.dso.mil/big-bang/product/packages/gluon/-/blob/master/docs/bb-package-readme.md).
 7. Push up your changes, add upgrade notices if applicable, validate that CI passes. If there are any failures, follow the information in the pipeline to make the necessary updates. Add the `debug` label to the MR for more detailed information. Reach out to the CODEOWNERS if needed.
-8. Perform the steps below for manual testing
+8. As part of your MR that modifies bigbang packages, you should modify the bigbang  [bigbang/tests/test-values.yaml](https://repo1.dso.mil/big-bang/bigbang/-/blob/master/tests/test-values.yaml?ref_type=heads) against your branch for the CI/CD MR testing by enabling your packages. 
+
+    - To do this, at a minimum, you will need to follow the instructions at [bigbang/docs/developer/test-package-against-bb.md](https://repo1.dso.mil/big-bang/bigbang/-/blob/master/docs/developer/test-package-against-bb.md?ref_type=heads) with changes for Promtail enabled (the below is a reference, actual changes could be more depending on what changes where made to Promtail in the pakcage MR).
+
+### [test-values.yaml](https://repo1.dso.mil/big-bang/bigbang/-/blob/master/tests/test-values.yaml?ref_type=heads)
+    ```yaml
+    promtail:
+      enabled: true
+      git:
+        tag: null
+        branch: <my-package-branch-that-needs-testing>
+      values:
+        istio:
+          hardened:
+            enabled: true
+      ### Additional compononents of Promtail should be changed to reflect testing changes introduced in the package MR
+    ```
+
+9. Perform the steps below for manual testing
 
 ### Modifications made to upstream
 > List of changes per file to be aware of for how Big Bang differs from upstream
