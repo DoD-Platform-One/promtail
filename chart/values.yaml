@@ -76,9 +76,16 @@ deployment:
     targetMemoryUtilizationPercentage:
     # behavior: {}
 
-    # -- Set deployment object update strategy
-    strategy:
-      type: RollingUpdate
+  # -- Set deployment object update strategy
+  strategy:
+    type: RollingUpdate
+
+service:
+  enabled: false
+  # -- Labels for the service
+  labels: {}
+  # -- Annotations for the service
+  annotations: {}
 
 secret:
   # -- Labels for the Secret
@@ -111,7 +118,7 @@ image:
   # -- Docker image repository
   repository: ironbank/opensource/grafana/promtail
   # -- Overrides the image tag whose default is the chart's appVersion
-  tag: v2.9.4
+  tag: v3.0.0
   # -- Docker image pull policy
   pullPolicy: IfNotPresent
 
@@ -598,7 +605,7 @@ sidecar:
       # -- Docker image repository for sidecar config-reloader
       repository: ironbank/opensource/jimmidyson/configmap-reload
       # -- Docker image tag for sidecar config-reloader
-      tag: v0.12.0
+      tag: v0.13.1
       # -- Docker image pull policy for sidecar config-reloader
       pullPolicy: IfNotPresent
     # Extra args for the config-reloader container.

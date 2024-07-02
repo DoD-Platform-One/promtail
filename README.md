@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 6.15.5-bb.7](https://img.shields.io/badge/Version-6.15.5--bb.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.9.4](https://img.shields.io/badge/AppVersion-2.9.4-informational?style=flat-square)
+![Version: 6.16.2-bb.0](https://img.shields.io/badge/Version-6.16.2--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.0.0](https://img.shields.io/badge/AppVersion-3.0.0-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -52,14 +52,17 @@ helm install promtail chart/
 | deployment.autoscaling.maxReplicas | int | `10` |  |
 | deployment.autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
 | deployment.autoscaling.targetMemoryUtilizationPercentage | string | `nil` |  |
-| deployment.autoscaling.strategy | object | `{"type":"RollingUpdate"}` | Set deployment object update strategy |
+| deployment.strategy | object | `{"type":"RollingUpdate"}` | Set deployment object update strategy |
+| service.enabled | bool | `false` |  |
+| service.labels | object | `{}` | Labels for the service |
+| service.annotations | object | `{}` | Annotations for the service |
 | secret.labels | object | `{}` | Labels for the Secret |
 | secret.annotations | object | `{}` | Annotations for the Secret |
 | configmap.enabled | bool | `false` | If enabled, promtail config will be created as a ConfigMap instead of a secret |
 | initContainer | list | `[]` |  |
 | image.registry | string | `"registry1.dso.mil"` | The Docker registry |
 | image.repository | string | `"ironbank/opensource/grafana/promtail"` | Docker image repository |
-| image.tag | string | `"v2.9.4"` | Overrides the image tag whose default is the chart's appVersion |
+| image.tag | string | `"v3.0.0"` | Overrides the image tag whose default is the chart's appVersion |
 | image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy |
 | imagePullSecrets | list | `[{"name":"private-registry"}]` | Image pull secrets for Docker images |
 | hostAliases | list | `[]` | hostAliases to add |
@@ -135,7 +138,7 @@ helm install promtail chart/
 | sidecar.configReloader.enabled | bool | `false` |  |
 | sidecar.configReloader.image.registry | string | `"registry1.dso.mil"` | The Docker registry for sidecar config-reloader |
 | sidecar.configReloader.image.repository | string | `"ironbank/opensource/jimmidyson/configmap-reload"` | Docker image repository for sidecar config-reloader |
-| sidecar.configReloader.image.tag | string | `"v0.12.0"` | Docker image tag for sidecar config-reloader |
+| sidecar.configReloader.image.tag | string | `"v0.13.1"` | Docker image tag for sidecar config-reloader |
 | sidecar.configReloader.image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy for sidecar config-reloader |
 | sidecar.configReloader.extraArgs | list | `[]` |  |
 | sidecar.configReloader.extraEnv | list | `[]` | Extra environment variables for sidecar config-reloader |
