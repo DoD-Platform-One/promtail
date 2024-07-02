@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 6.15.5-bb.0](https://img.shields.io/badge/Version-6.15.5--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.9.4](https://img.shields.io/badge/AppVersion-v2.9.4-informational?style=flat-square)
+![Version: 6.16.2-bb.0](https://img.shields.io/badge/Version-6.15.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.9.3](https://img.shields.io/badge/AppVersion-2.9.3-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -83,7 +83,7 @@ The new release which will pick up again from the existing `positions.yaml`.
 | deployment.autoscaling.maxReplicas | int | `10` |  |
 | deployment.autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
 | deployment.autoscaling.targetMemoryUtilizationPercentage | string | `nil` |  |
-| deployment.autoscaling.strategy | object | `{"type":"RollingUpdate"}` | Set deployment object update strategy |
+| deployment.strategy | object | `{"type":"RollingUpdate"}` | Set deployment object update strategy |
 | secret.labels | object | `{}` | Labels for the Secret |
 | secret.annotations | object | `{}` | Annotations for the Secret |
 | configmap.enabled | bool | `false` | If enabled, promtail config will be created as a ConfigMap instead of a secret |
@@ -107,7 +107,14 @@ The new release which will pick up again from the existing `positions.yaml`.
 | containerSecurityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"privileged":false,"readOnlyRootFilesystem":true,"runAsUser":0,"seLinuxOptions":{"type":"spc_t"}}` | The security context for containers |
 | rbac.create | bool | `true` | Specifies whether RBAC resources are to be created |
 | rbac.pspEnabled | bool | `false` | Specifies whether a PodSecurityPolicy is to be created |
-| namespace | string | `nil` | The name of the Namespace to deploy If not set, `.Release.Namespace` is used |
+| readinessProbe | object | See `values.yaml` | Readiness probe |
+| resources | object | `{}` | Resource requests and limits |
+| secret.annotations | object | `{}` | Annotations for the Secret |
+| secret.labels | object | `{}` | Labels for the Secret |
+| service.annotations | object | `{}` | Annotations for the service |
+| service.enabled | bool | `false` |  |
+| service.labels | object | `{}` | Labels for the service |
+| serviceAccount.annotations | object | `{}` | Annotations for the service account |
 | serviceAccount.create | bool | `true` | Specifies whether a ServiceAccount should be created |
 | serviceAccount.name | string | `nil` | The name of the ServiceAccount to use. If not set and `create` is true, a name is generated using the fullname template |
 | serviceAccount.imagePullSecrets | list | `[]` | Image pull secrets for the service account |
