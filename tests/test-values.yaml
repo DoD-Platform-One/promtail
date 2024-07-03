@@ -3,8 +3,3 @@ imagePullSecrets:
 
 networkPolicies:
   enabled: true
-
-# enable istio hardening in tests
-istio:
-  hardened:
-    enabled: true
