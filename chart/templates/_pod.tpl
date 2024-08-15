@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "promtail.selectorLabels" . | nindent 4 }}
     {{- with .Values.podLabels }}
-    {{- toYaml . | nindent 4 }}
+    {{- tpl (toYaml .) $ | nindent 4 }}
     {{- end }}
   annotations:
     {{- if not .Values.sidecar.configReloader.enabled }}
