@@ -1,67 +1,515 @@
 component-definition:
-  uuid: 2A0F84C5-7FD3-48A1-9C39-68316603C038
-  metadata: 
-    title: Promtail
-    last-modified: '2022-06-08T12:00:00Z'
-    version: "20220608"
-    oscal-version: 1.1.1
-    parties:
-      # Should be consistent across all of the packages, but where is ground truth?
-    - uuid: 72134592-08C2-4A77-ABAD-C880F109367A 
-      type: organization
-      name: Platform One
-      links:
-      - href: https://p1.dso.mil
-        rel: website
-  components: # for BB, this would be all the pieces of big bang
-  - uuid: 6266DF09-F893-4D44-9823-4486B91D81ED
-    type: software
-    title: Promtail
-    description: |
-      Log collector
-    purpose: Collects logs from the cluster
-    responsible-roles:
-    - role-id: provider
-      party-uuids: 
-      - 72134592-08C2-4A77-ABAD-C880F109367A # matches parties entry for p1
-    control-implementations:
-    - uuid: d2afb4c4-2cd8-5305-a6cc-d1bc7b388d0c
-      source: https://raw.githubusercontent.com/GSA/fedramp-automation/93ca0e20ff5e54fc04140613476fba80f08e3c7d/dist/content/rev5/baselines/json/FedRAMP_rev5_HIGH-baseline-resolved-profile_catalog.json
-      description:
-        Controls implemented by Promtail for inheritance by applications
-      implemented-requirements:
-      - uuid: 1E11CEA9-CE73-45F0-BE08-D16B521B8E7E
-        control-id: ac-6.9
-        description: >-
-          Promtail can be configured to collect all logs from Kubernetes and underlying operating systems, allowing the aggregation of privileged function calls.
-      - uuid: CF81FA93-D365-42C2-82B1-A24EB92556E5
-        control-id: au-2
-        description: >-
-          Logging daemons are present on each node that BigBang is installed on.  Out of the box, the following events are captured:
-          * all containers emitting to STDOUT or STDERR (captured  by container runtime translating container logs to /var/log/containers).
-          * all kubernetes api server requests.
-          * all events emitted by the kubelet.
-      - uuid: 6DDD209A-87A4-48BF-B6B9-5925CC7CF4C3
-        control-id: au-3
-        description: >-
-          Records captured by the logging daemon are enriched to  ensure the following are always present:
-          * time of the event (UTC).
-          * source of event (pod, namespace, container id).
-          Applications are responsible for providing all other information.
-      - uuid: D3F883A0-4531-407F-8802-F8233CD1DEE9
-        control-id: au-8
-        description: >-
-          Records captured by the logging daemon are enriched to  ensure the following are always present:
-          * time of the event (UTC).
-          * source of event (pod, namespace, container id).
-          Applications are responsible for providing all other information.
-  back-matter: 
+  back-matter:
     resources:
-    - uuid: D552C935-E40C-4A03-B5CC-4605EBD95B6D
+      - rlinks:
+          - href: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/promtail
+        title: Big Bang Promtail package
+        uuid: be47ec1e-8ee4-4111-9801-506d969a2c07
+      - rlinks:
+          - href: https://grafana.com/docs/loki/latest/clients/promtail/
+        title: Promtail
+        uuid: be90edbb-08f1-49c6-a9e9-40cec3d9749f
+      - description: |
+          domain:
+            kubernetes-spec:
+              create-resources: null
+              resources:
+              - description: ""
+                name: pods
+                resource-rule:
+                  group: ""
+                  name: ""
+                  namespaces:
+                  - promtail
+                  resource: pods
+                  version: v1
+            type: kubernetes
+          lula-version: ""
+          metadata:
+            name: check-promtail-configuration-file-used-by-container
+            uuid: 420d8ee3-afb5-4d60-8907-e5141bce6995
+          provider:
+            opa-spec:
+              output:
+                observations:
+                - validate.msg
+                validation: validate.validate
+              rego: |
+                package validate
+                import rego.v1
+
+                # Default values
+                default validate := false
+                default msg := "Not evaluated"
+
+                validate if {
+                  check_promtail_config_file.result
+                }
+                msg = check_promtail_config_file.msg
+
+                # Check containers have the promtail configuration file
+                pods := {sprintf("%s/%s", [pod.metadata.namespace, pod.metadata.name]) | pod := input.pods[_]}
+                pods_with_config := {sprintf("%s/%s", [pod.metadata.namespace, pod.metadata.name]) | pod := input.pods[_]; uses_promtail_config(pod)}
+
+                check_promtail_config_file = {"result": true, "msg": msg} if {
+                  pods == pods_with_config
+                  msg := "All promtail pods use promtail.yaml config."
+                } else = {"result": false, "msg": msg} if {
+                  msg := sprintf("promtail.yaml config not used by container in pods: %s.", [concat(", ", pods - pods_with_config)])
+                }
+
+                uses_promtail_config(pod) if {
+                  containers := pod.spec.containers
+                  some container in containers
+                  container.name == "promtail"
+                  some i
+                  container.args[i] == "-config.file=/etc/promtail/promtail.yaml"
+                }
+            type: opa
+        title: check-promtail-configuration-file-used-by-container
+        uuid: 420d8ee3-afb5-4d60-8907-e5141bce6995
+      - description: |
+          domain:
+            kubernetes-spec:
+              create-resources: null
+              resources:
+              - description: ""
+                name: promconfig
+                resource-rule:
+                  field:
+                    base64: true
+                    jsonpath: .data.promtail.yaml
+                    type: yaml
+                  group: ""
+                  name: promtail-promtail
+                  namespaces:
+                  - promtail
+                  resource: secrets
+                  version: v1
+            type: kubernetes
+          lula-version: ""
+          metadata:
+            name: logformat-configuration-valid
+            uuid: 50237372-d02c-48fa-9b23-12eeb62345e6
+          provider:
+            opa-spec:
+              output:
+                observations:
+                - validate.msg
+                validation: validate.validate
+              rego: |
+                package validate
+                import rego.v1
+
+                # Default values
+                default validate := false
+                default msg := "Not evaluated."
+
+                validate if {
+                  input.promconfig.server.log_format == "logfmt"
+                }
+                msg = "logfmt used in promtail config." if {
+                  validate
+                } else = "logfmt not used in promtail config."
+            type: opa
+        title: logformat-configuration-valid
+        uuid: 50237372-d02c-48fa-9b23-12eeb62345e6
+      - description: |
+          domain:
+            kubernetes-spec:
+              create-resources: null
+              resources:
+              - description: ""
+                name: promtailpods
+                resource-rule:
+                  group: ""
+                  name: ""
+                  namespaces:
+                  - promtail
+                  resource: pods
+                  version: v1
+              - description: ""
+                name: promconfig
+                resource-rule:
+                  field:
+                    base64: true
+                    jsonpath: .data.promtail.yaml
+                    type: yaml
+                  group: ""
+                  name: promtail-promtail
+                  namespaces:
+                  - promtail
+                  resource: secrets
+                  version: v1
+            type: kubernetes
+          lula-version: ""
+          metadata:
+            name: promtail-configured-to-tail-kubernetes-pods
+            uuid: 71f6b6d0-c850-44c8-937c-24af940d5f57
+          provider:
+            opa-spec:
+              output:
+                observations:
+                - validate.msg
+                validation: validate.validate
+              rego: |
+                package validate
+                import rego.v1
+
+                # Default values
+                default validate := false
+                default msg := "Not evaluated."
+
+                # Main validation rule
+                validate if {
+                  pod_logs_volume.result
+                  kubernetes_pod_logs_configured.result
+                }
+                msg := concat(" ", [pod_logs_volume.msg, kubernetes_pod_logs_configured.msg])
+
+                # Check that volume for pod logs is mounted
+                pods := {sprintf("%s/%s", [pod.metadata.namespace, pod.metadata.name]) | pod := input.promtailpods[_]}
+                pods_with_volume := {sprintf("%s/%s", [pod.metadata.namespace, pod.metadata.name]) | pod := input.promtailpods[_]; has_pod_logs_volume(pod)}
+
+                pod_logs_volume = { "result": true, "msg": msg } if {
+                  pods == pods_with_volume
+                  msg := "Volume for pod logs is correctly mounted."
+                } else = { "result": false, "msg": msg } if {
+                  msg := sprintf("Volume for pod logs is not mounted in pods: %s.", [concat(", ", pods - pods_with_volume)])
+                }
+
+                has_pod_logs_volume(pod) if {
+                  volumes := pod.spec.volumes
+                  some volume in volumes
+                  volume.name == "pods"
+                  volume.hostPath.path == "/var/log/pods"
+                }
+
+                # Check if sd_config set for pod role
+                kubernetes_pod_logs_configured = { "result": true, "msg": "Promtail is correctly configured to capture Kubernetes pod logs." } if {
+                  # There should exist some scrape_config for pod logs
+                  some i
+                  scrape_config := input.promconfig.scrape_configs[i]
+
+                  # Ensure kubernetes_sd_configs is set for pod role
+                  some j
+                  kubernetes_sd_config := scrape_config.kubernetes_sd_configs[j]
+                  kubernetes_sd_config.role == "pod"
+
+                  # Verify __path__ label is correctly configured for pod logs
+                  path_configs := {c | c := scrape_config.relabel_configs[_]; c.target_label == "__path__"}
+                  every config in path_configs {
+                    startswith(config.replacement, "/var/log/pods/*")
+                  }
+                } else = { "result": false, "msg": "Promtail is not correctly configured to capture Kubernetes pod logs." }
+            type: opa
+        title: promtail-configured-to-tail-kubernetes-pods
+        uuid: 71f6b6d0-c850-44c8-937c-24af940d5f57
+      - description: |
+          domain:
+            kubernetes-spec:
+              create-resources: null
+              resources:
+              - description: ""
+                name: promtailpods
+                resource-rule:
+                  group: ""
+                  name: ""
+                  namespaces:
+                  - promtail
+                  resource: pods
+                  version: v1
+              - description: ""
+                name: promconfig
+                resource-rule:
+                  field:
+                    base64: true
+                    jsonpath: .data.promtail.yaml
+                    type: yaml
+                  group: ""
+                  name: promtail-promtail
+                  namespaces:
+                  - promtail
+                  resource: secrets
+                  version: v1
+            type: kubernetes
+          lula-version: ""
+          metadata:
+            name: promtail-configured-to-tail-system-logs
+            uuid: 95babf3a-3858-43eb-b34e-55878ef8b1e8
+          provider:
+            opa-spec:
+              output:
+                observations:
+                - validate.msg
+                validation: validate.validate
+              rego: |
+                package validate
+                import rego.v1
+
+                # Default values
+                default validate := false
+                default msg := "Not evaluated."
+
+                # Main validation rule
+                validate if {
+                  logs_volume.result
+                  system_logs_configured.result
+                  has_essential_labels.result
+                }
+                msg := concat(" ", [logs_volume.msg, system_logs_configured.msg, has_essential_labels.msg])
+
+                # Check that volume for logs is mounted
+                pods := {sprintf("%s/%s", [pod.metadata.namespace, pod.metadata.name]) | pod := input.promtailpods[_]}
+                pods_with_volume := {sprintf("%s/%s", [pod.metadata.namespace, pod.metadata.name]) | pod := input.promtailpods[_]; has_varlog_volume(pod)}
+
+                logs_volume = { "result": true, "msg": msg } if {
+                  pods == pods_with_volume
+                  msg := "Volume for system logs is correctly mounted."
+                } else = { "result": false, "msg": msg } if {
+                  msg := sprintf("Volume for system logs is not mounted in pods: %s.", [concat(", ", pods - pods_with_volume)])
+                }
+
+                has_varlog_volume(pod) if {
+                  volumes := pod.spec.volumes
+                  some volume in volumes
+                  volume.name == "varlog"
+                  volume.hostPath.path == "/var/log"
+                }
+
+                # Check if path is set up
+                system_logs_configured = { "result": true, "msg": "Promtail is correctly configured to capture System logs." } if {
+                  some i
+                  scrape_config := input.promconfig.scrape_configs[i]
+
+                  # Ensure __path__ in static_configs points to system log paths
+                  some j
+                  static_config := scrape_config.static_configs[j]
+                  startswith(static_config.labels["__path__"], "/var/log")
+                } else = { "result": false, "msg": "Promtail is not correctly configured to capture System logs." }
+
+                has_essential_labels = {"result": true, "msg": "Essential labels found."} if {
+                  scrape_config := input.promconfig.scrape_configs[_]
+                    scrape_config["job_name"] == "systemd-messages"
+
+                  missing_labels := essential_source_labels_present(scrape_config.relabel_configs)
+                  count(missing_labels) == 0
+                } else = {"result": false, "msg": msg} if {
+                  scrape_config := input.promconfig.scrape_configs[_]
+                    scrape_config["job_name"] == "systemd-messages"
+
+                  missing_labels := essential_source_labels_present(scrape_config.relabel_configs)
+                  count(missing_labels) != 0
+                  msg := sprintf("Missing essential source labels: %v.", [missing_labels])
+                }
+
+                # Helper rule to check the presence of essential source_labels in relabel_configs
+                essential_source_labels_present(relabel_configs) := missing_labels if {
+                  # Define essential source_labels for system log capturing
+                  essential_labels := {"__journal_systemd_unit", "__journal_hostname", "__journal_syslog_identifier"}
+
+                  # Extract all source_labels from relabel_configs
+                  all_source_labels := {label |
+                      some i
+                      config := relabel_configs[i]
+                      label := config.source_labels[_]
+                  }
+
+                  # Check if all essential_labels are within all_source_labels
+                  missing_labels := essential_labels - all_source_labels
+                }
+            type: opa
+        title: promtail-configured-to-tail-system-logs
+        uuid: 95babf3a-3858-43eb-b34e-55878ef8b1e8
+      - description: |
+          domain:
+            kubernetes-spec:
+              create-resources: null
+              resources:
+              - description: ""
+                name: daemonsets
+                resource-rule:
+                  group: apps
+                  name: ""
+                  namespaces:
+                  - promtail
+                  resource: daemonsets
+                  version: v1
+            type: kubernetes
+          lula-version: ""
+          metadata:
+            name: promtail-healthcheck
+            uuid: 786bc911-6956-450e-92e8-67e0646b1cd7
+          provider:
+            opa-spec:
+              output:
+                observations:
+                - validate.msg
+                validation: validate.validate
+              rego: |
+                package validate
+                import rego.v1
+
+                # Default values
+                default validate := false
+                default msg := "Not evaluated."
+
+                # Check if promtail is healthy and available
+                validate if {
+                  check_promtail_daemonsets.result
+                  check_promtail_pods.result
+                }
+                msg = concat(" ", [check_promtail_daemonsets.msg, check_promtail_pods.msg])
+
+                # Check promtail daemonset found
+                found_daemonsets := {d | d := input.daemonsets[_]; d.kind == "DaemonSet"}
+
+                check_promtail_daemonsets = {"result": true, "msg": "Promtail daemonset found."} if {
+                  count(found_daemonsets) > 0
+                } else = {"result": false, "msg": "Promtail daemonset not found."}
+
+                # Check promtail pods available
+                check_promtail_pods = {"result": true, "msg": "Promtail pods available."} if {
+                  status := found_daemonsets[_].status
+                  available(status)
+                } else = {"result": false, "msg": "Promtail pods not available."}
+
+                available(status) if {
+                  status.desiredNumberScheduled == status.numberAvailable
+                  status.numberAvailable == status.numberReady
+                }
+            type: opa
+        title: promtail-healthcheck
+        uuid: 786bc911-6956-450e-92e8-67e0646b1cd7
+  components:
+    - control-implementations:
+        - description: Controls implemented by Promtail for inheritance by applications
+          implemented-requirements:
+            - control-id: ac-6.9
+              description: "# Control Implementation \nPromtail can be configured to collect all logs from Kubernetes and underlying operating systems, allowing the aggregation of privileged function calls.\nThis control is partially implemented by this tool. \"Partial\" implementation due to the fact that promtail does not actively identify what \"priviledged functions\" would be - it simply scapes all logs from the targets it is instrumented to tail."
+              links:
+                - href: '#786bc911-6956-450e-92e8-67e0646b1cd7'
+                  rel: lula
+                  text: Promtail Healthcheck
+                - href: '#71f6b6d0-c850-44c8-937c-24af940d5f57'
+                  rel: lula
+                  text: Validate promtail captures Kubernetes pod logs where priviledged functions may be executed
+                - href: '#420d8ee3-afb5-4d60-8907-e5141bce6995'
+                  rel: lula
+                  text: Check promtail configuration file used in workloads
+                - href: '#95babf3a-3858-43eb-b34e-55878ef8b1e8'
+                  rel: lula
+                  text: Validate promtail captures System logs where priviledged functions may be executed
+              remarks: |-
+                ASSESSMENT-OBJECTIVE:
+                the execution of privileged functions is logged.
+              uuid: 7491f812-2997-4c93-bda4-6cfbe4981c9b
+            - control-id: au-2
+              description: |-
+                # Control Implementation
+                  a. Identify the types of events that the system is capable of logging in support of the audit function for organization-defined event types that the system is capable of logging;
+                  b. Coordinate the event logging function with other organizational entities requiring audit-related information to guide and inform the selection criteria for events to be logged;
+                  c. Specify the following event types for logging within the system organization-defined event types (subset of the event types defined in AU-2a.) along with the frequency of (or situation requiring) logging for each identified event type;
+                  d. Provide a rationale for why the event types selected for logging are deemed to be adequate to support after-the-fact investigations of incidents; and
+                  e. Review and update the event types selected for logging on an organization-defined frequency.
+
+                  Logging daemons are present on each node that BigBang is installed on.  Out of the box, the following events are captured:
+                  * all containers emitting to STDOUT or STDERR (captured  by container runtime translating container logs to /var/log/containers).
+                  * all kubernetes api server requests.
+                  * all events emitted by the kubelet.
+
+                  This control is fully implemented by this tool.
+              links:
+                - href: '#786bc911-6956-450e-92e8-67e0646b1cd7'
+                  rel: lula
+                  text: Promtail Healthcheck
+                - href: '#420d8ee3-afb5-4d60-8907-e5141bce6995'
+                  rel: lula
+                  text: Check promtail configuration file used in workloads
+                - href: '#71f6b6d0-c850-44c8-937c-24af940d5f57'
+                  rel: lula
+                  text: Validate promtail captures Kubernetes pod logs where priviledged functions may be executed
+                - href: '#95babf3a-3858-43eb-b34e-55878ef8b1e8'
+                  rel: lula
+                  text: Validate promtail captures System logs where priviledged functions may be executed
+              remarks: |
+                ASSESSMENT-OBJECTIVE:
+                AU-02a.  [Assignment: organization-defined event types] that the system is capable of logging are identified in support of the audit logging function;
+                AU-02b. the event logging function is coordinated with other organizational entities requiring audit-related information to guide and inform the selection criteria for events to be logged;
+                AU-02c.
+                	AU-02c.[01]  [Assignment: organization-defined event types (subset of AU-02_ODP[01])] are specified for logging within the system;
+                	AU-02c.[02] the specified event types are logged within the system [Assignment: organization-defined frequency or situation];
+                AU-02d. a rationale is provided for why the event types selected for logging are deemed to be adequate to support after-the-fact investigations of incidents;
+                AU-02e. the event types selected for logging are reviewed and updated [Assignment: organization-defined frequency].
+              uuid: 0194ded5-1ee9-420c-b0f7-ce39ed4918c2
+            - control-id: au-3
+              description: |-
+                # Control Implementation
+                  Logs are captured by promtail from the node. The node logs will contain the necessary log data from all pods/applications inside the selected nodes.
+                  Validating `logfmt` as the config.logFormat would be the goal. This is currently a secret mounted to /etc/promtail/promtail.yaml in the promtail container. We will ensure the promtail.yaml file is at a minimum the target config.
+                  https://grafana.com/docs/loki/latest/send-data/promtail/stages/logfmt/
+              links:
+                - href: '#786bc911-6956-450e-92e8-67e0646b1cd7'
+                  rel: lula
+                  text: Promtail Healthcheck
+                - href: '#420d8ee3-afb5-4d60-8907-e5141bce6995'
+                  rel: lula
+                  text: Check promtail configuration file used in workloads
+                - href: '#50237372-d02c-48fa-9b23-12eeb62345e6'
+                  rel: lula
+                  text: Validate promtail uses logfmt in configuration
+              remarks: |
+                ASSESSMENT-OBJECTIVE:
+                AU-03a. audit records contain information that establishes what type of event occurred;
+                AU-03b. audit records contain information that establishes when the event occurred;
+                AU-03c. audit records contain information that establishes where the event occurred;
+                AU-03d. audit records contain information that establishes the source of the event;
+                AU-03e. audit records contain information that establishes the outcome of the event;
+                AU-03f. audit records contain information that establishes the identity of any individuals, subjects, or objects/entities associated with the event.
+              uuid: 7718d81c-342b-4971-99b5-95c9dd0fa0da
+            - control-id: au-8
+              description: "# Control Implementation\nRecords captured by the logging daemon are enriched to  ensure the following are always present:\n* time of the event (UTC).\n* source of event (pod, namespace, container id).\nApplications are responsible for providing all other information.\\\nValidating `logfmt` as the config.logFormat would be the goal. This is currently a secret mounted to /etc/promtail/promtail.yaml in the promtail container. \nWe will ensure the promtail.yaml file is at a minimum the target config https://grafana.com/docs/loki/latest/send-data/promtail/stages/logfmt/ "
+              links:
+                - href: '#786bc911-6956-450e-92e8-67e0646b1cd7'
+                  rel: lula
+                  text: Promtail Healthcheck
+                - href: '#420d8ee3-afb5-4d60-8907-e5141bce6995'
+                  rel: lula
+                  text: Check promtail configuration file used in workloads
+                - href: '#50237372-d02c-48fa-9b23-12eeb62345e6'
+                  rel: lula
+                  text: Validate promtail uses logfmt in configuration
+              remarks: |
+                ASSESSMENT-OBJECTIVE:
+                AU-08a. internal system clocks are used to generate timestamps for audit records;
+                AU-08b. timestamps are recorded for audit records that meet [Assignment: organization-defined granularity of time measurement] and that use Coordinated Universal Time, have a fixed local time offset from Coordinated Universal Time, or include the local time offset as part of the timestamp.
+              uuid: 932f46fc-8f02-47df-8e1f-1bbe21d7df69
+          props:
+            - name: generation
+              ns: https://docs.lula.dev/oscal/ns
+              value: lula generate component --catalog-source https://raw.githubusercontent.com/GSA/fedramp-automation/93ca0e20ff5e54fc04140613476fba80f08e3c7d/dist/content/rev5/baselines/json/FedRAMP_rev5_HIGH-baseline-resolved-profile_catalog.json --component 'Promtail' --requirements ac-6.9,au-2,au-3,au-8, --remarks assessment-objective
+          source: https://raw.githubusercontent.com/GSA/fedramp-automation/93ca0e20ff5e54fc04140613476fba80f08e3c7d/dist/content/rev5/baselines/json/FedRAMP_rev5_HIGH-baseline-resolved-profile_catalog.json
+          uuid: d2afb4c4-2cd8-5305-a6cc-d1bc7b388d0c
+      description: |
+        Log collector
+      purpose: Collects logs from the cluster
+      responsible-roles:
+        - party-uuids:
+            - 72134592-08C2-4A77-ABAD-C880F109367A
+          role-id: provider
       title: Promtail
-      rlinks:
-      - href: https://grafana.com/docs/loki/latest/clients/promtail/
-    - uuid: 211C474B-E11A-4DD2-8075-50CDAC507CDC
-      title: Big Bang Promtail package
-      rlinks:
-        - href: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/promtail
+      type: software
+      uuid: a477c2b6-5ecc-4078-add8-e7eadce737e6
+  metadata:
+    last-modified: 2024-09-03T10:25:00.695428-04:00
+    oscal-version: 1.1.2
+    parties:
+      - links:
+          - href: https://p1.dso.mil
+            rel: website
+        name: Platform One
+        type: organization
+        uuid: 72134592-08C2-4A77-ABAD-C880F109367A
+    title: Promtail
+    version: "20240710"
+  uuid: f149a847-bc64-4c6f-bb33-494d7263c532
