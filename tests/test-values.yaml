@@ -1,5 +1,2 @@
-imagePullSecrets:
-- name: private-registry
-
 networkPolicies:
   enabled: true
