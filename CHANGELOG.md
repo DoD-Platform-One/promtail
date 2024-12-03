@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - Updating Promtail `oscal-component.yaml` to include Lula validations for automated assessment
+- Added the maintenance track annotation and badge
 
 ### Added
 

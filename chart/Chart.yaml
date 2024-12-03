@@ -15,6 +15,7 @@ maintainers:
     email: lokiproject@googlegroups.com
   - name: unguiculus
 annotations:
+  bigbang.dev/maintenanceTrack: bb_integrated
   bigbang.dev/applicationVersions: |
     - Promtail: v3.0.0
   bigbang.dev/upstreamReleaseNotesMarkdown: |
