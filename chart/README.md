@@ -1,6 +1,6 @@
 # promtail
 
-![Version: 6.16.2-bb.0](https://img.shields.io/badge/Version-6.15.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.9.3](https://img.shields.io/badge/AppVersion-2.9.3-informational?style=flat-square)
+![Version: 6.16.6](https://img.shields.io/badge/Version-6.16.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.0.0](https://img.shields.io/badge/AppVersion-3.0.0-informational?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -73,6 +73,25 @@ The new release which will pick up again from the existing `positions.yaml`.
 | vpa | object | `{"annotations":{},"controlledResources":[],"enabled":false,"kind":"DaemonSet","maxAllowed":{},"minAllowed":{},"updatePolicy":{"updateMode":"Auto"}}` | config for VerticalPodAutoscaler |
 | daemonset.enabled | bool | `true` | Deploys Promtail as a DaemonSet |
 | daemonset.autoscaling.enabled | bool | `false` | Creates a VerticalPodAutoscaler for the daemonset |
+| affinity | object | `{}` | Affinity configuration for pods |
+| annotations | object | `{}` | Annotations for the DaemonSet |
+| automountServiceAccountToken | bool | `true` | Automatically mount API credentials for a particular Pod |
+| config | object | See `values.yaml` | Section for crafting Promtails config file. The only directly relevant value is `config.file` which is a templated string that references the other values and snippets below this key. |
+| config.clients | list | See `values.yaml` | The config of clients of the Promtail server Must be reference in `config.file` to configure `clients` |
+| config.enableTracing | bool | `false` | The config to enable tracing |
+| config.enabled | bool | `true` | Enable Promtail config from Helm chart Set `configmap.enabled: true` and this to `false` to manage your own Promtail config See default config in `values.yaml` |
+| config.file | string | See `values.yaml` | Config file contents for Promtail. Must be configured as string. It is templated so it can be assembled from reusable snippets in order to avoid redundancy. |
+| config.logFormat | string | `"logfmt"` | The log format of the Promtail server Must be reference in `config.file` to configure `server.log_format` Valid formats: `logfmt, json` See default config in `values.yaml` |
+| config.logLevel | string | `"info"` | The log level of the Promtail server Must be reference in `config.file` to configure `server.log_level` See default config in `values.yaml` |
+| config.positions | object | `{"filename":"/run/promtail/positions.yaml"}` | Configures where Promtail will save it's positions file, to resume reading after restarts. Must be referenced in `config.file` to configure `positions` |
+| config.serverPort | int | `3101` | The port of the Promtail server Must be reference in `config.file` to configure `server.http_listen_port` See default config in `values.yaml` |
+| config.snippets | object | See `values.yaml` | A section of reusable snippets that can be reference in `config.file`. Custom snippets may be added in order to reduce redundancy. This is especially helpful when multiple `kubernetes_sd_configs` are use which usually have large parts in common. |
+| config.snippets.extraLimitsConfig | string | empty | You can put here any keys that will be directly added to the config file's 'limits_config' block. |
+| config.snippets.extraRelabelConfigs | list | `[]` | You can put here any additional relabel_configs to "kubernetes-pods" job |
+| config.snippets.extraScrapeConfigs | string | empty | You can put here any additional scrape configs you want to add to the config file. |
+| config.snippets.extraServerConfigs | string | empty | You can put here any keys that will be directly added to the config file's 'server' block. |
+| configmap.enabled | bool | `false` | If enabled, promtail config will be created as a ConfigMap instead of a secret |
+| containerSecurityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true}` | The security context for containers |
 | daemonset.autoscaling.controlledResources | list | `[]` | List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory |
 | daemonset.autoscaling.maxAllowed | object | `{}` | Defines the max allowed resources for the pod |
 | daemonset.autoscaling.minAllowed | object | `{}` | Defines the min allowed resources for the pod |
@@ -115,6 +134,7 @@ The new release which will pick up again from the existing `positions.yaml`.
 | service.enabled | bool | `false` |  |
 | service.labels | object | `{}` | Labels for the service |
 | serviceAccount.annotations | object | `{}` | Annotations for the service account |
+| serviceAccount.automountServiceAccountToken | bool | `true` | Automatically mount a ServiceAccount's API credentials |
 | serviceAccount.create | bool | `true` | Specifies whether a ServiceAccount should be created |
 | serviceAccount.name | string | `nil` | The name of the ServiceAccount to use. If not set and `create` is true, a name is generated using the fullname template |
 | serviceAccount.imagePullSecrets | list | `[]` | Image pull secrets for the service account |
