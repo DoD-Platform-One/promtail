@@ -1,16 +1,16 @@
 <!-- Warning: Do not manually edit this file. See notes on gluon + helm-docs at the end of this file for more information. -->
 # promtail
 
-![Version: 6.16.2-bb.4](https://img.shields.io/badge/Version-6.16.2--bb.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.0.0](https://img.shields.io/badge/AppVersion-3.0.0-informational?style=flat-square) ![Maintenance Track: bb_integrated](https://img.shields.io/badge/Maintenance_Track-bb_integrated-green?style=flat-square)
+![Version: 6.16.6-bb.0](https://img.shields.io/badge/Version-6.16.6--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.3.2](https://img.shields.io/badge/AppVersion-3.3.2-informational?style=flat-square) ![Maintenance Track: bb_integrated](https://img.shields.io/badge/Maintenance_Track-bb_integrated-green?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
 ## Upstream References
-- <https://grafana.com/loki>
 
-* <https://github.com/grafana/loki>
-* <https://grafana.com/oss/loki/>
-* <https://grafana.com/docs/loki/latest/>
+- <https://grafana.com/loki>
+- <https://github.com/grafana/loki>
+- <https://grafana.com/oss/loki/>
+- <https://grafana.com/docs/loki/latest/>
 
 ## Upstream Release Notes
 
@@ -70,7 +70,7 @@ helm install promtail chart/
 | initContainer | list | `[]` |  |
 | image.registry | string | `"registry1.dso.mil"` | The Docker registry |
 | image.repository | string | `"ironbank/opensource/grafana/promtail"` | Docker image repository |
-| image.tag | string | `"v3.0.0"` | Overrides the image tag whose default is the chart's appVersion |
+| image.tag | string | `"v3.3.2"` | Overrides the image tag whose default is the chart's appVersion |
 | image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy |
 | imagePullSecrets | list | `[{"name":"private-registry"}]` | Image pull secrets for Docker images |
 | hostAliases | list | `[]` | hostAliases to add |
@@ -92,6 +92,8 @@ helm install promtail chart/
 | serviceAccount.name | string | `nil` | The name of the ServiceAccount to use. If not set and `create` is true, a name is generated using the fullname template |
 | serviceAccount.imagePullSecrets | list | `[]` | Image pull secrets for the service account |
 | serviceAccount.annotations | object | `{}` | Annotations for the service account |
+| serviceAccount.automountServiceAccountToken | bool | `true` | Automatically mount a ServiceAccount's API credentials |
+| automountServiceAccountToken | bool | `true` | Automatically mount API credentials for a particular Pod |
 | nodeSelector | object | `{}` | Node selector for pods |
 | affinity | object | `{}` | Affinity configuration for pods |
 | tolerations | list | `[{"effect":"NoSchedule","key":"node-role.kubernetes.io/master","operator":"Exists"},{"effect":"NoSchedule","key":"node-role.kubernetes.io/control-plane","operator":"Exists"}]` | Tolerations for pods. By default, pods will be scheduled on master/control-plane nodes. |
@@ -146,7 +148,7 @@ helm install promtail chart/
 | sidecar.configReloader.enabled | bool | `false` |  |
 | sidecar.configReloader.image.registry | string | `"registry1.dso.mil"` | The Docker registry for sidecar config-reloader |
 | sidecar.configReloader.image.repository | string | `"ironbank/opensource/jimmidyson/configmap-reload"` | Docker image repository for sidecar config-reloader |
-| sidecar.configReloader.image.tag | string | `"v0.13.1"` | Docker image tag for sidecar config-reloader |
+| sidecar.configReloader.image.tag | string | `"v0.14.0"` | Docker image tag for sidecar config-reloader |
 | sidecar.configReloader.image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy for sidecar config-reloader |
 | sidecar.configReloader.extraArgs | list | `[]` |  |
 | sidecar.configReloader.extraEnv | list | `[]` | Extra environment variables for sidecar config-reloader |

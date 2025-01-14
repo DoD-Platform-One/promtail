@@ -118,7 +118,7 @@ image:
   # -- Docker image repository
   repository: ironbank/opensource/grafana/promtail
   # -- Overrides the image tag whose default is the chart's appVersion
-  tag: v3.0.0
+  tag: v3.3.2
   # -- Docker image pull policy
   pullPolicy: IfNotPresent
 
@@ -216,6 +216,11 @@ serviceAccount:
   imagePullSecrets: []
   # -- Annotations for the service account
   annotations: {}
+  # -- Automatically mount a ServiceAccount's API credentials
+  automountServiceAccountToken: true
+
+# -- Automatically mount API credentials for a particular Pod
+automountServiceAccountToken: true
 
 # -- Node selector for pods
 nodeSelector: {}
@@ -605,7 +610,7 @@ sidecar:
       # -- Docker image repository for sidecar config-reloader
       repository: ironbank/opensource/jimmidyson/configmap-reload
       # -- Docker image tag for sidecar config-reloader
-      tag: v0.13.1
+      tag: v0.14.0
       # -- Docker image pull policy for sidecar config-reloader
       pullPolicy: IfNotPresent
     # Extra args for the config-reloader container.
