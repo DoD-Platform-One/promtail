@@ -1,47 +1,53 @@
 {
-    "baseBranches": ["main"],
-    "configWarningReuseIssue": false,
-    "dependencyDashboard": true,
-    "dependencyDashboardTitle": "Renovate: Upgrade Promtail Package Dependencies",
-    "draftPR": true,
-    "enabledManagers": ["helm-values","regex"],
-    "ignorePaths": ["chart/charts/**"],
-    "ignoreDeps": ["docker.io/busybox"],
-    "labels": ["promtail","renovate"],
-    "commitMessagePrefix": "SKIP UPDATE CHECK",
-    "packageRules": [
-        {
-            "matchDatasources": ["docker"],
-            "groupName": "Ironbank"
-        }
+  "baseBranches": ["main"],
+  "configWarningReuseIssue": false,
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "Renovate: Upgrade Promtail Package Dependencies",
+  "draftPR": true,
+  "enabledManagers": ["custom.regex", "helm-values", "helmv3"],
+  "ignorePaths": ["chart/charts/**"],
+  "ignoreDeps": ["docker.io/busybox"],
+  "labels": ["promtail", "renovate", "kind::maintenance", "team::Observability"],
+  "postUpdateOptions": ["helmUpdateSubChartArchives"],
+  "separateMajorMinor": false,
+  "packageRules": [
+    {"matchDatasources": ["docker", "helm"], "groupName": "Ironbank"}
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update app version chart annotations",
+      "fileMatch": ["^chart/Chart\\.yaml$"],
+      "matchStrings": [
+        "- Promtail:\\s*(?<currentValue>.+)",
+        "appVersion:\\s*(?<currentValue>.+)"
+      ],
+      "depNameTemplate": "registry1.dso.mil/ironbank/opensource/grafana/promtail",
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Update docker image references",
+      "fileMatch": ["^chart/Chart\\.yaml$"],
+      "matchStrings": ["image:[^\\S\\r\\n]+(?<depName>.+):(?<currentValue>.+)"],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Update chart version",
+      "fileMatch": ["^chart/Chart\\.yaml$"],
+      "matchStrings": ["version:\\s+(?<currentValue>.+)-bb\\.\\d+"],
+      "autoReplaceStringTemplate": "version: {{newValue}}-bb.0",
+      "depNameTemplate": "promtail",
+      "datasourceTemplate": "helm",
+      "registryUrlTemplate": "https://grafana.github.io/helm-charts"
+    }
+  ],
+  "postUpgradeTasks": {
+    "commands": [
+      "regenerate-helm-docs",
+      "bump-changelog '- {{{replace 'registry1.dso.mil/' '' depName}}} updated from {{{currentVersion}}} to {{{newVersion}}}'"
     ],
-    "regexManagers": [
-        {
-            "fileMatch": ["^chart/Chart\\.yaml$"],
-            "matchStrings": [
-                "appVersion:\\s*(?<currentValue>.+)"
-            ],
-            "depNameTemplate": "ironbank/opensource/grafana/promtail",
-            "datasourceTemplate": "docker",
-            "registryUrlTemplate": "https://registry1.dso.mil"
-        },
-        {
-            "fileMatch": ["^chart/Chart\\.yaml$"],
-            "matchStrings": [
-                "- Promtail:\\s*(?<currentValue>.+)"
-            ],
-            "depNameTemplate": "ironbank/opensource/grafana/promtail",
-            "datasourceTemplate": "docker",
-            "registryUrlTemplate": "https://registry1.dso.mil"
-        },
-        {
-            "fileMatch": ["^chart/Chart\\.yaml$"],
-            "matchStrings": [
-                "image:[^\\S\\r\\n]+(?<depName>.+):(?<currentValue>.+)"
-            ],
-            "datasourceTemplate": "docker"
-        }
-    ],
-    "separateMajorMinor": false,
-    "postUpdateOptions": ["helmUpdateSubChartArchives"]
+    "fileFilters": ["chart/Chart.yaml", "README.md", "CHANGELOG.md"]
+  }
 }
