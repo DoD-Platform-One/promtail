@@ -20,7 +20,7 @@ annotations:
     - Promtail: v3.3.2
   bigbang.dev/upstreamReleaseNotesMarkdown: |
     - [Find upstream chart's release notes and CHANGELOG here](https://github.com/grafana/helm-charts/releases?q=promtail&expanded=true)
-    - [Find upstream applications's release notes and CHANGELOG here](https://grafana.com/docs/loki/latest/release-notes/)
+    - [Find upstream application's release notes and CHANGELOG here](https://grafana.com/docs/loki/latest/release-notes/)
   helm.sh/images: |
     - name: promtail
       image: registry1.dso.mil/ironbank/opensource/grafana/promtail:v3.3.2
