@@ -1,7 +1,7 @@
 <!-- Warning: Do not manually edit this file. See notes on gluon + helm-docs at the end of this file for more information. -->
 # promtail
 
-![Version: 6.16.6-bb.0](https://img.shields.io/badge/Version-6.16.6--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.3.2](https://img.shields.io/badge/AppVersion-3.3.2-informational?style=flat-square) ![Maintenance Track: bb_integrated](https://img.shields.io/badge/Maintenance_Track-bb_integrated-green?style=flat-square)
+![Version: 6.16.6-bb.1](https://img.shields.io/badge/Version-6.16.6--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.3.2](https://img.shields.io/badge/AppVersion-3.3.2-informational?style=flat-square) ![Maintenance Track: bb_integrated](https://img.shields.io/badge/Maintenance_Track-bb_integrated-green?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -15,7 +15,7 @@ Promtail is an agent which ships the contents of local logs to a Loki instance
 ## Upstream Release Notes
 
 - [Find upstream chart's release notes and CHANGELOG here](https://github.com/grafana/helm-charts/releases?q=promtail&expanded=true)
-- [Find upstream applications's release notes and CHANGELOG here](https://grafana.com/docs/loki/latest/release-notes/)
+- [Find upstream application's release notes and CHANGELOG here](https://grafana.com/docs/loki/latest/release-notes/)
 
 ## Learn More
 
