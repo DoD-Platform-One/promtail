@@ -82,6 +82,9 @@ promtail:
 loki:
   enabled: true
   strategy: scalable
+  values:
+    minio:
+      enabled: true
 grafana:
   enabled: true
 
@@ -94,7 +97,8 @@ Current testing is done manually. Deployment of Big Bang with Istio, Monitoring,
 
 Once healthy:
 - Go to [https://grafana.dev.bigbang.mil](https://grafana.dev.bigbang.mil) in your browser and login with [default credentials](https://repo1.dso.mil/big-bang/bigbang/-/blob/master/docs/guides/using-bigbang/default-credentials.md)
-- Navigate to `Configuration -> Data sources -> Loki`
-- Click on `Save & test` and ensure `Data source successfully connected.` message appears
+- Navigate to `Connections -> Data sources -> Loki`
+  - Click on `Save & test` and ensure `Data source successfully connected.` message appears
+- Search dashboards for `Loki Dashboard Quick Search` and confirm log data is being populated/no error messages
 
 > When in doubt with any testing or upgrade steps, reach out to the CODEOWNERS for assistance.
