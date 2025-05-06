@@ -4,6 +4,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [6.16.6-bb.4] 2025-05-02
+
+### Updated
+
+- Update promtail from `v3.4.3` -> `v3.5.0`
+- Update configmap-reload from `v0.14.0` -> `v0.15.0`
+
 ## [6.16.6-bb.3] 2025-04-08
 
 ### Updated
