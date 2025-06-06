@@ -63,6 +63,10 @@ promtail:
 ```yaml
 monitoring:
   enabled: true
+alloy:
+  enabled: false
+bbctl:
+  enabled: false
 promtail:
   enabled: true
   git:

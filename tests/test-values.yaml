@@ -17,6 +17,10 @@ kyvernoReporter:
   enabled: false
 kiali:
   enabled: false
+alloy:
+  enabled: false
+bbctl:
+  enabled: false
 addons:
   # minioOperator:
   #   enabled: false
