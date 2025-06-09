@@ -4,6 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [6.16.6-bb.5] 2025-05-29
+
+### Updated
+
+- Updated ironbank/opensource/grafana/promtail v3.5.0 -> v3.5.1
+
 ## [6.16.6-bb.4] 2025-05-02
 
 ### Updated
