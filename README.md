@@ -1,7 +1,7 @@
 <!-- Warning: Do not manually edit this file. See notes on gluon + helm-docs at the end of this file for more information. -->
 # promtail
 
-![Version: 6.16.6-bb.4](https://img.shields.io/badge/Version-6.16.6--bb.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.5.0](https://img.shields.io/badge/AppVersion-3.5.0-informational?style=flat-square) ![Maintenance Track: bb_integrated](https://img.shields.io/badge/Maintenance_Track-bb_integrated-green?style=flat-square)
+![Version: 6.16.6-bb.5](https://img.shields.io/badge/Version-6.16.6--bb.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.5.1](https://img.shields.io/badge/AppVersion-3.5.1-informational?style=flat-square) ![Maintenance Track: bb_integrated](https://img.shields.io/badge/Maintenance_Track-bb_integrated-green?style=flat-square)
 
 Promtail is an agent which ships the contents of local logs to a Loki instance
 
@@ -70,7 +70,7 @@ helm install promtail chart/
 | initContainer | list | `[]` |  |
 | image.registry | string | `"registry1.dso.mil"` | The Docker registry |
 | image.repository | string | `"ironbank/opensource/grafana/promtail"` | Docker image repository |
-| image.tag | string | `"v3.5.0"` | Overrides the image tag whose default is the chart's appVersion |
+| image.tag | string | `"v3.5.1"` | Overrides the image tag whose default is the chart's appVersion |
 | image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy |
 | imagePullSecrets | list | `[{"name":"private-registry"}]` | Image pull secrets for Docker images |
 | hostAliases | list | `[]` | hostAliases to add |
